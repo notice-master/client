@@ -1,0 +1,21 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm run --filter=@nmc/* --parallel dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@efox/emp": "^2.5.1",
+    "browserslist": "^4.21.4",
+    "eslint": "^8.28.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

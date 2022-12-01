@@ -1,0 +1,33 @@
+{
+  "name": "@nmc/host",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "emp dev -cl false",
+    "build": "emp build",
+    "build:ts": "emp build -t",
+    "start": "emp serve",
+    "stat": "emp build --analyze"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@efox/emp": "^2.5.1",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
+    "browserslist": "^4.21.4",
+    "eslint": "^8.28.0"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.8.0",
+    "@ant-design/pro-components": "^2.3.39",
+    "@nmc/common": "workspace:*",
+    "antd": "^5.0.3",
+    "axios": "^0.21.4",
+    "rc-field-form": "^1.27.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.4"
+  }
+}
