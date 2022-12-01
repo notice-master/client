@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "pnpm run --filter=@nmc/* --parallel dev",
+    "build": "pnpm run --filter=@nmc/* --parallel build",
+    "build:ts": "pnpm run --filter=@nmc/* --parallel build:ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
