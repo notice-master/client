@@ -52,5 +52,5 @@ jobs:
           # Artifact name
           name: notice-master-client
           # A file, directory or wildcard pattern that describes what to upload
-          path: artifacts/notice-master-client.zip
+          path: notice-master-client.zip
           # The desired behavior if no files are found using the provided path.
