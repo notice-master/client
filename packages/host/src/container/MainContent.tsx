@@ -5,7 +5,12 @@ import { CommonHeader } from '../components';
 
 const { ErrorBoundary } = Alert;
 
-const ContentWrapper = ({ children }) => {
+interface Props {
+  children?: React.ReactNode
+  // any props that come into the component
+}
+
+const ContentWrapper = ({ children }: Props) => {
   return (
     <>
       <CommonHeader />
@@ -16,15 +21,15 @@ const ContentWrapper = ({ children }) => {
 
 const MainContent = () => {
   // const {MainRouters} = React.lazy(() => import('@nmc/navigation/container'));
-  const MainRouters = React.lazy(() =>
-    () => <></>
-    // import('@nmc/navigation/container').then((modules) => {
-    //   const { MainRouters } = modules;
-    //   return {
-    //     default: MainRouters,
-    //   };
-    // })
-  );
+  const MainRouters = () => <></>;
+  // React.lazy(() =>
+  //   import('@nmc/navigation/container').then((modules) => {
+  //     const { MainRouters } = modules;
+  //     return {
+  //       default: MainRouters,
+  //     };
+  //   })
+  // );
 
   return (
     <ErrorBoundary message="加载路由失败" description="">

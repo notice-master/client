@@ -2,11 +2,11 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Alert, Col, Layout, Row } from 'antd';
 import React from 'react';
 
-const RemoteLeftMenu = React.lazy(
-  () => () => {
-    return <></>
-  }
-);
+const RemoteLeftMenu = () => <></>;
+// const RemoteLeftMenu = React.lazy(
+//   () => import('@nmc/navigation/components/LeftMenu')
+// );
+
 const { Sider } = Layout;
 const { ErrorBoundary } = Alert;
 
