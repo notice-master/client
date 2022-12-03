@@ -42,7 +42,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm config set registry https://registry.npmmirror.com/ && pnpm install
         
       - name: Build packages
         run: pnpm run build
