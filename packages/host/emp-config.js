@@ -1,28 +1,28 @@
-const {defineConfig} = require('@efox/emp')
-const {cdn, esm} = require('./cdn');
-const { VanillaExtractPlugin } = require('@vanilla-extract/webpack-plugin');
+const { defineConfig } = require("@efox/emp");
+const { cdn, esm } = require("./cdn");
+const { VanillaExtractPlugin } = require("@vanilla-extract/webpack-plugin");
 
-module.exports = defineConfig(({mode}) => {
+module.exports = defineConfig(({ mode }) => {
   // const target = 'es2018'
-  const target = 'es5'
-  const isESM = !['es3', 'es5'].includes(target)
+  const target = "es5";
+  const isESM = !["es3", "es5"].includes(target);
   return {
     build: {
       target,
-      staticDir: 'static',
+      staticDir: "static",
     },
     server: {
       port: 8001,
     },
     webpackChain: (wpChain) => {
-      wpChain.plugin('VanillaExtractPlugin').use(new VanillaExtractPlugin());
+      wpChain.plugin("VanillaExtractPlugin").use(new VanillaExtractPlugin());
     },
     empShare: {
-      name: 'microHost',
+      name: "microHost",
       // esm 共享需要设置 window
       // library: {name: 'microHost', type: 'window'},
       exposes: {
-        './App': './src/App',
+        "./App": "./src/App",
         // './Button': './src/Button',
         // './importExport/incStore': './src/store/incStore',
       },
@@ -33,13 +33,13 @@ module.exports = defineConfig(({mode}) => {
       shareLib: !isESM
         ? cdn(mode)
         : {
-            react: esm('react', mode, '17.0.2'),
-            'react-dom': esm('react-dom', mode, '17.0.2'),
-            mobx: esm('mobx', mode),
-            'mobx-react-lite': esm('mobx-react-lite', mode),
+            react: esm("react", mode, "17.0.2"),
+            "react-dom": esm("react-dom", mode, "17.0.2"),
+            mobx: esm("mobx", mode),
+            "mobx-react-lite": esm("mobx-react-lite", mode),
           },
       // shareLib: cdn(mode),
     },
-    html: {title: 'Micro-Host'},
-  }
-})
+    html: { title: "Micro-Host", publicPath: "/" },
+  };
+});
