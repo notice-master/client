@@ -3,7 +3,7 @@ on:
   - pull_request
 
 jobs:
-  cache-and-install:
+  install-and-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,6 +14,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+          
+      - name: Set Taobao Registry
+        uses: raver119/set-npm-token-action@v1.3
+        with:
+          registry: "https://registry.npmmirror.com/"
 
       - uses: pnpm/action-setup@v2
         name: Install pnpm
