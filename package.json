@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm run --filter=!@nmc/common --parallel dev",
+    "dev": "cross-env NODE_ENV=development pnpm run --filter=!@nmc/common --parallel dev",
     "build": "pnpm run --filter=!@nmc/common --parallel build",
     "build:ts": "pnpm run --filter=!@nmc/common --parallel build:ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,6 +15,7 @@
   "devDependencies": {
     "@efox/emp": "^2.5.1",
     "browserslist": "^4.21.4",
+    "cross-env": "^7.0.3",
     "eslint": "^8.28.0"
   },
   "workspaces": [
