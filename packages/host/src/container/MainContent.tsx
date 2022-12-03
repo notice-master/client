@@ -2,6 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Alert, Col, Layout, Row } from 'antd';
 import React from 'react';
 import { CommonHeader } from '../components';
+import MainRouters from './MainRouters';
 
 const { ErrorBoundary } = Alert;
 
@@ -21,7 +22,6 @@ const ContentWrapper = ({ children }: Props) => {
 
 const MainContent = () => {
   // const {MainRouters} = React.lazy(() => import('@nmc/navigation/container'));
-  const MainRouters = () => <></>;
   // React.lazy(() =>
   //   import('@nmc/navigation/container').then((modules) => {
   //     const { MainRouters } = modules;

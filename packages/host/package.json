@@ -16,6 +16,8 @@
     "@efox/emp": "^2.5.1",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
+    "@vanilla-extract/css": "^1.9.2",
+    "@vanilla-extract/webpack-plugin": "^2.2.0",
     "browserslist": "^4.21.4",
     "eslint": "^8.28.0"
   },

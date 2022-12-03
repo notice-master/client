@@ -1,5 +1,6 @@
 const {defineConfig} = require('@efox/emp')
-const {cdn, esm} = require('./cdn')
+const {cdn, esm} = require('./cdn');
+const { VanillaExtractPlugin } = require('@vanilla-extract/webpack-plugin');
 
 module.exports = defineConfig(({mode}) => {
   // const target = 'es2018'
@@ -12,6 +13,9 @@ module.exports = defineConfig(({mode}) => {
     },
     server: {
       port: 8001,
+    },
+    webpackChain: (wpChain) => {
+      wpChain.plugin('VanillaExtractPlugin').use(new VanillaExtractPlugin());
     },
     empShare: {
       name: 'microHost',

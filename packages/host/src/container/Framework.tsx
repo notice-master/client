@@ -3,7 +3,6 @@ import { Alert, Layout } from 'antd';
 // import 'antd/dist/antd.min.css';
 import { LeftMenu } from '../components';
 import MainContent from '../container/MainContent';
-import '../styled/common.scss';
 
 const { Footer } = Layout;
 
