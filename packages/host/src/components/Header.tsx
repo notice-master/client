@@ -10,11 +10,16 @@ const CommonHeader = () => {
 
   return (
     <Header className="site-layout-background" style={{ padding: 0 }}>
-      <PageHeader
-        className="site-page-header"
-        title={currentPageInfo.title}
-        subTitle={currentPageInfo.subtitle}
-      />
+      {
+        (currentPageInfo?.title || currentPageInfo?.subtitle) && (
+          <PageHeader
+            className="site-page-header"
+            title={currentPageInfo.title}
+            subTitle={currentPageInfo.subtitle}
+          />
+        )
+      }
+      
     </Header>
   );
 };

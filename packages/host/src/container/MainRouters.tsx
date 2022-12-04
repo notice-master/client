@@ -1,7 +1,8 @@
 import { LoadingOutlined } from '@ant-design/icons';
+import { setCurrentPageInfo, useAppDispatch } from '@nmc/common';
 import { Alert, Col, Layout, Row } from 'antd';
-import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import BreadcrumbContent from '../components/BreadcrumbContent';
 import { routes } from '../constants';
 import NotFoundPage from './NotFoundPage';
@@ -14,6 +15,18 @@ const DefaultWrapper = ({ children }: {children: React.ReactNode}) => (
 
 const MainRouters = ({ wrapper }: MainRoutersProps) => {
   const Wrapper = wrapper || DefaultWrapper;
+  const dispatch = useAppDispatch();
+  let location = useLocation();
+  useEffect(() => {
+    return () =>{
+      dispatch(
+        setCurrentPageInfo({
+          title: '',
+          subtitle: '',
+        })
+      );
+    }
+  }, [location]);
   const { ErrorBoundary } = Alert;
   return (
     <Routes>

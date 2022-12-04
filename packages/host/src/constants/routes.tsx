@@ -2,6 +2,8 @@ import { HomePage, TaskEntry } from '../container';
 interface RouteInterface {
   path: string;
   component: JSX.Element;
+  title?: string;
+  subTitle?: string;
 }
 // const TemplateMessageEntry = React.lazy(
 //   () => import('@nmc/template-message/entry')
