@@ -1,8 +1,8 @@
 import { setCurrentPageInfo, useAppDispatch } from '@nmc/common';
-import { Button, Col, Input, Row } from 'antd';
+import { Button, Col, Input, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
+import useBeforeUnload from 'use-before-unload';
 import TaskWorker from '../../components/TaskWorker';
-import { ProgressBarContainer } from '../../styled';
 
 type WorkerPoolType = {
   [key: string]: { key: string; taskHelper?: TaskHelperInterface };
@@ -40,17 +40,24 @@ const TaskExecutor = () => {
   });
   const [state, setState] = useState(false);
   const [workerPool, setWorkerPool] = useState<WorkerPoolType>({});
+  useBeforeUnload((event) => {
+    if(state) {
+      return '任务已创建,确定要离开?';
+    } else {
+      return true;
+    }
+  });
   const init = () => {
     if (!state) {
+      setState(true);
       console.log('threadCounts: ', threadCounts);
-
       const tasksObj: WorkerPoolType = {};
       new Array(threadCounts).fill('').forEach(() => {
         const key = Math.random().toString(32).substring(3);
         tasksObj[key] = { key };
       });
       setWorkerPool(tasksObj);
-      setState(true);
+      
     }
   };
   const reset = () => {
@@ -98,7 +105,7 @@ const TaskExecutor = () => {
   }, [workerPool]);
 
   return (
-    <div>
+    <Spin spinning={state && !isAllWorkerReady} size="large" tip={'正在创建任务....'}>
       <Row gutter={5} align="middle">
         <Col>进程数:</Col>
         <Col>
@@ -137,7 +144,7 @@ const TaskExecutor = () => {
           pause
         </Button>
       </div>
-      <div className={ProgressBarContainer}>
+      <div>
         {state &&
           Object.keys(workerPool).map((key: string, index: number) => {
             const workerObj = workerPool[key];
@@ -162,7 +169,7 @@ const TaskExecutor = () => {
             );
           })}
       </div>
-    </div>
+    </Spin>
   );
 };
 

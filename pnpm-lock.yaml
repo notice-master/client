@@ -71,6 +71,7 @@ importers:
       react: ^18.2.0
       react-dom: ^18.2.0
       react-router-dom: ^6.4.4
+      use-before-unload: ^1.0.1
     dependencies:
       '@ant-design/icons': 4.8.0_biqbaboplfbrettd7655fr4n2y
       '@ant-design/pro-components': 2.3.39_vipjkfu2gzvfnhk7njzkq3l6oi
@@ -81,6 +82,7 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-router-dom: 6.4.4_biqbaboplfbrettd7655fr4n2y
+      use-before-unload: 1.0.1_react@18.2.0
     devDependencies:
       '@efox/emp': 2.5.1_sblvbremltmw5j4kdd3ugnczrm
       '@types/react': 18.0.25
@@ -9429,6 +9431,14 @@ packages:
       schema-utils: 3.1.1
       webpack: 5.75.0
     dev: true
+
+  /use-before-unload/1.0.1_react@18.2.0:
+    resolution: {integrity: sha512-HfISqBwjmSVLpc7jIhbTwh37jVaGaReiagn8bpyA7A0k6zDLxFkTtPZWcXzeVgs/B5sPZxc6h6fDuelvnHor3A==}
+    peerDependencies:
+      react: ^16.8.3
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /use-json-comparison/1.0.6_react@18.2.0:
     resolution: {integrity: sha512-xPadt5yMRbEmVfOSGFSMqjjICrq7nLbfSH3rYIXsrtcuFX7PmbYDN/ku8ObBn3v8o/yZelO1OxUS5+5TI3+fUw==}

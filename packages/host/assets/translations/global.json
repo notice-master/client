@@ -1,0 +1,14 @@
+{
+    "zh-CN": {
+        "home": "首页",
+        "template-message": "模板消息",
+        "overview": "概览",
+        "list": "列表"
+    },
+    "en-US": {
+        "home": "Home",
+        "template-message": "Template message",
+        "test": "test",
+        "list": "list"
+    }
+}
