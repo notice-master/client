@@ -8,6 +8,6 @@ jobs:
         env:
           SUPER_SECRET: ${{ secrets.secret_key }}
         run: |
-          echo "$SUPER_SECRET"
+          echo "ENV: $SUPER_SECRET"
   
   
