@@ -1,0 +1,13 @@
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - shell: bash
+        env:
+          QINIU_SECRET: ${{ secrets.QINIU_SECRET }}
+        run: |
+          echo "ENV: $SUPER_SECRET"
+  
+  
