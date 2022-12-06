@@ -3,12 +3,14 @@
         "home": "首页",
         "template-message": "模板消息",
         "overview": "概览",
-        "list": "列表"
+        "list": "列表",
+        "task": "推送任务"
     },
     "en-US": {
         "home": "Home",
         "template-message": "Template message",
         "test": "test",
-        "list": "list"
+        "list": "list",
+        "task": "Task"
     }
 }

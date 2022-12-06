@@ -1,6 +1,7 @@
 const { defineConfig } = require("@efox/emp");
 const { cdn, esm } = require("./cdn");
 const { VanillaExtractPlugin } = require("@vanilla-extract/webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = defineConfig(({ mode }) => {
   // const target = 'es2018'
@@ -16,6 +17,11 @@ module.exports = defineConfig(({ mode }) => {
     },
     webpackChain: (wpChain) => {
       wpChain.plugin("VanillaExtractPlugin").use(new VanillaExtractPlugin());
+      wpChain.plugin('copy').use(CopyPlugin, [
+        {
+          patterns: [{ from: 'assets', to: 'assets' }],
+        },
+      ]);
     },
     empShare: {
       name: "microHost",

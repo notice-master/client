@@ -29,6 +29,11 @@ const globalMessages: messageMap = defineMessages({
     description: 'Message to list of the Navigator.',
     defaultMessage: '列表',
   },
+  task: {
+    id: `${scope}.task`,
+    description: 'Message to list of the Navigator.',
+    defaultMessage: '任务',
+  },
   unknow: {
     id: `${scope}.unknow`,
     description: 'Message to overview of the Navigator.',
