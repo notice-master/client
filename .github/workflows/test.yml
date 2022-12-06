@@ -1,0 +1,14 @@
+on:
+  watch:
+    types: started
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - shell: bash
+        env:
+          SUPER_SECRET: ${{ secrets.secret_key }}
+        run: |
+          example-command "$SUPER_SECRET"
+  
+  
