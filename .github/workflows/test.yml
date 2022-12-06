@@ -6,7 +6,7 @@ jobs:
     steps:
       - shell: bash
         env:
-          QINIU_SECRET: ${{ secrets.qiniu_secret }}
+          QINIU_SECRET: ${{ secrets.QINIU_SECRET }}
         run: |
           echo "ENV: $SUPER_SECRET"
   
