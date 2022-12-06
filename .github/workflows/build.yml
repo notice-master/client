@@ -54,3 +54,23 @@ jobs:
           # A file, directory or wildcard pattern that describes what to upload
           path: notice-master-client.zip
           # The desired behavior if no files are found using the provided path.
+      - name: Upload to cdn
+        uses: saltbo/uptoc@v1.4.3
+        with:
+          # specify driver for the cloud platform
+          driver: qiniu
+          # specify region of the cloud platform
+          region: cn-south-1
+          # specify bucket name of the cloud platform
+          bucket: ${{ secrets.QINIU_BUCKET }}
+          # specify exclude the given comma separated directories
+          # exclude: # optional
+          # specify dist of the local directory
+          dist: packages/common/src/worker/
+          # specify remote path for the files
+          saveroot: modules/notice_master/packages/worker/
+        env:
+          UPTOC_UPLOADER_AK: ${{ secrets.QINIU_ACCESS_KEY }}
+          UPTOC_UPLOADER_SK: ${{ secrets.QINIU_SECRET_KEY }}
+
+  
