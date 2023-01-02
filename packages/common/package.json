@@ -5,13 +5,12 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "scripts": {
-    "dev": "emp dev -cl false",
-    "build": "emp build -wl",
+    "dev": "emp dev -t",
+    "build": "emp build -t -wl",
     "start": "emp serve",
-    "stat": "emp build --analyze",
-    "emp": "emp"
+    "stat": "emp build --analyze"
   },
-  "author": "",
+  "author": "Kylong",
   "license": "ISC",
   "devDependencies": {
     "@efox/emp": "^2.5.1",

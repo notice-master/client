@@ -10,7 +10,7 @@
     "start": "emp serve",
     "stat": "emp build --analyze"
   },
-  "author": "",
+  "author": "Kylong",
   "license": "ISC",
   "devDependencies": {
     "@efox/emp": "^2.5.1",
