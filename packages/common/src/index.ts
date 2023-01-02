@@ -1,5 +1,5 @@
 export * from 'redux-injectors';
-export { default as globalMessages } from './constants/messages';
+export * from './constants';
 export { default as CommonProviders } from './container/CommonProviders';
 export * from './hooks/useNLS';
 export * from './path';
