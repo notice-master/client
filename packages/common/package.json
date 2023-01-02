@@ -13,24 +13,24 @@
   "author": "Kylong",
   "license": "ISC",
   "devDependencies": {
-    "@efox/emp": "^2.5.1",
-    "@types/react": "^18.0.25",
-    "@types/react-dom": "^18.0.9",
+    "@efox/emp": "^2.6.2",
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.10",
     "browserslist": "^4.21.4",
-    "eslint": "^8.28.0"
+    "eslint": "^8.31.0"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.1",
+    "@apollo/client": "^3.7.3",
     "@reduxjs/toolkit": "^1.9.1",
     "axios": "^0.21.4",
     "graphql": "^16.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-intl": "^6.2.4",
+    "react-intl": "^6.2.5",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.4.4",
+    "react-router-dom": "^6.6.1",
     "redux": "^4.2.0",
     "redux-injectors": "^2.1.0",
-    "redux-saga": "^1.2.1"
+    "redux-saga": "^1.2.2"
   }
 }
