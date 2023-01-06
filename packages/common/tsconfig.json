@@ -2,7 +2,8 @@
   "extends": "@efox/emp/emp-tsconfig",
   "compilerOptions": {
     "types": ["@efox/emp/client"],
-    "baseUrl": "."
+    "baseUrl": ".",
+    "allowJs": false,
   },
   "include": [
     "src"
