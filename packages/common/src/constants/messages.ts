@@ -3,7 +3,7 @@ export interface messageMap {
   [key: string]: MessageDescriptor;
 }
 const scope = 'global';
-const globalMessages: messageMap = defineMessages({
+export const globalMessages: messageMap = defineMessages({
   home: {
     id: `${scope}.home`,
     description: 'Message to Home of the Navigator.',
@@ -40,4 +40,3 @@ const globalMessages: messageMap = defineMessages({
     defaultMessage: '未知',
   },
 });
-export default globalMessages;
