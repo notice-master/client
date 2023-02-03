@@ -64,7 +64,7 @@ jobs:
           # specify bucket name of the cloud platform
           bucket: ${{ secrets.QINIU_BUCKET }}
           # specify exclude the given comma separated directories
-          # exclude: # optional
+          exclude: .map,index.js # optional
           # specify dist of the local directory
           dist: packages/common/dist/esm/
           # specify remote path for the files
