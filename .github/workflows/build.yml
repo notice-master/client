@@ -66,9 +66,9 @@ jobs:
           # specify exclude the given comma separated directories
           # exclude: # optional
           # specify dist of the local directory
-          dist: packages/common/src/worker/
+          dist: packages/common/dist/esm/
           # specify remote path for the files
-          saveroot: modules/notice_master/packages/worker/
+          saveroot: modules/notice_master/packages/common/
         env:
           UPTOC_UPLOADER_AK: ${{ secrets.QINIU_ACCESS_KEY }}
           UPTOC_UPLOADER_SK: ${{ secrets.QINIU_SECRET_KEY }}

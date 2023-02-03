@@ -2,10 +2,13 @@
  * @version 1.0.0
  * @Author Kylong
  */
-importScripts(
-  'https://cdn.bootcdn.net/ajax/libs/axios/0.25.0/axios.min.js',
-  'https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.21/lodash.min.js'
-);
+// importScripts(
+//   'https://cdn.bootcdn.net/ajax/libs/axios/0.25.0/axios.min.js',
+//   'https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.21/lodash.min.js'
+// );
+import axios from "axios";
+import * as R from 'ramda';
+
 const MessageActions = {
   setup: 'setup',
   run: 'run',
@@ -122,7 +125,7 @@ class Task {
     }
   }
   getFinalRequest(task) {
-    const mergedTask = _.defaultsDeep(task, this.taskSets);
+    const mergedTask = R.mergeDeepLeft(task, this.taskSets);
     return {
       url: mergedTask.url,
       params: mergedTask.search,

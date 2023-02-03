@@ -283,3 +283,6 @@ https://webpack.js.org/guides/web-workers/
 
 ### 使用`ramada`替换`lodash`,学习函数式编程
 [https://ramdajs.com/](https://ramdajs.com/)
+
+### IndexedDB 的使用
+可以将处理状态放在前端数据库,缓解后端数据库压力,并在必要时候做好数据同步
