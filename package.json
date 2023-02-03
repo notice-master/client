@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development pnpm run --filter=!@nmc/common --parallel dev",
-    "build": "pnpm run --filter=!@nmc/common --parallel build",
+    "build": "pnpm run --parallel build",
     "build:ts": "pnpm run --filter=!@nmc/common --parallel build:ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
