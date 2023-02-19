@@ -7,7 +7,7 @@ module.exports = defineConfig({
       name: '@nmc/common',
       entry: {
         index: './src/index.ts',
-        worker: './src/worker/task.worker.js'
+        worker: './src/worker/task.worker.ts'
       },
       formats: ['esm'],
     },
