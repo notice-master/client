@@ -19,6 +19,7 @@ importers:
       '@apollo/client': ^3.7.3
       '@efox/emp': ^2.6.2
       '@reduxjs/toolkit': ^1.9.1
+      '@types/ramda': ^0.28.22
       '@types/react': ^18.0.26
       '@types/react-dom': ^18.0.10
       axios: ^0.21.4
@@ -52,6 +53,7 @@ importers:
       redux-saga: 1.2.2
     devDependencies:
       '@efox/emp': 2.6.2_mlpp2jbzvceqgdcxuxiwh6q2nu
+      '@types/ramda': 0.28.22
       '@types/react': 18.0.26
       '@types/react-dom': 18.0.10
       browserslist: 4.21.4
@@ -3692,6 +3694,12 @@ packages:
 
   /@types/qs/6.9.7:
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
+    dev: true
+
+  /@types/ramda/0.28.22:
+    resolution: {integrity: sha512-DoIfh0sBxrL/aqADk+SGrfjJT9cB8modg+4NRlF7/Tfg4N2+KBEkAgpYYzrjiZxxR5YzWizjfVrTEdVDwYK7xQ==}
+    dependencies:
+      ts-toolbelt: 6.15.5
     dev: true
 
   /@types/range-parser/1.2.4:
@@ -9437,6 +9445,10 @@ packages:
     dependencies:
       tslib: 2.4.1
     dev: false
+
+  /ts-toolbelt/6.15.5:
+    resolution: {integrity: sha512-FZIXf1ksVyLcfr7M317jbB67XFJhOO1YqdTcuGaq9q5jLUoTikukZ+98TPjKiP2jC5CgmYdWWYs0s2nLSU0/1A==}
+    dev: true
 
   /tsconfig-paths/3.14.1:
     resolution: {integrity: sha512-fxDhWnFSLt3VuTwtvJt5fpwxBHg5AdKWMsgcPOOIilyjymcYVZoCQF8fvFRezCNfblEXmi+PcM1eYHeOAgXCOQ==}

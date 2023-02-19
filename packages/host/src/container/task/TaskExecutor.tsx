@@ -1,4 +1,4 @@
-import { setCurrentPageInfo, useAppDispatch } from '@nmc/common';
+import { openDB, setCurrentPageInfo, useAppDispatch } from '@nmc/common';
 import { Button, Col, Input, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import useBeforeUnload from 'use-before-unload';
@@ -8,6 +8,46 @@ type WorkerPoolType = {
   [key: string]: { key: string; taskHelper?: TaskHelperInterface };
 };
 
+async function doDatabaseStuff() {
+  const db = await openDB('testDB', 1, {
+    upgrade(db, oldVersion, newVersion, transaction, event) {
+      const store = db.createObjectStore('testStore', {
+        keyPath: 'id',
+        autoIncrement: true
+      });
+      store.createIndex('date', 'date');
+    },
+    blocked(currentVersion, blockedVersion, event) {
+    },
+    blocking(currentVersion, blockedVersion, event) {
+    },
+    terminated() {
+    },
+  });
+  // db.put('test', 'testKey', 1)
+  await db.add('testStore', {
+    title: 'Article 1',
+    date: new Date('2019-01-01'),
+    body: '…',
+  });
+
+  const tx = db.transaction('testStore', 'readwrite');
+  await Promise.all([
+    tx.store.add({
+      title: 'Article 2',
+      date: new Date('2019-01-01'),
+      body: '…',
+    }),
+    tx.store.add({
+      title: 'Article 3',
+      date: new Date('2019-01-02'),
+      body: '…',
+    }),
+    tx.done,
+  ]);
+  console.log(await db.getAllFromIndex('testStore', 'date'));
+}
+
 const TaskExecutor = () => {
   const dispatch = useAppDispatch();
   const [threadCounts, setThreadCounts] = useState(10);
@@ -15,11 +55,11 @@ const TaskExecutor = () => {
     url: 'https://w.1717shua.cn/addons/zjl_mass_tpl_msg/apiAgent.php',
     // url: 'https://agent.1717shua.cn/cgi-bin/template/api_add_template',
     delay: 0,
-    search: {
+    params: {
       api: 'message/template/send',
       access_token: 'test_token',
     },
-    params: {
+    data: {
       touser: 'ot7Ngwyd0fEwZqq_DCZ6Yt9xQ6Qc',
       template_id: 'f1DPMaEr-Q8WRYxmgxG67YCD8zoOOuyJCpel1OJEax0',
       url: '',
@@ -94,6 +134,7 @@ const TaskExecutor = () => {
         subtitle: '',
       })
     );
+    doDatabaseStuff();
   }, []);
 
   const isAllWorkerReady = useMemo(() => {
