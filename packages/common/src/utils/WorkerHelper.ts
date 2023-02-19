@@ -1,19 +1,8 @@
-// const path = require('path');
-type MessageType = {
-  action: string | number;
-  data: any;
-  status?: {
-    name: string;
-    total: number;
-    finished: number;
-  };
-};
-export const getMessage = (
-  action: string | number,
-  data?: any | undefined,
-  taskObj?: any | undefined
-) => {
-  const result: MessageType = {
+import { ITask, TWorkerMessage } from "src/types/worker";
+import { MessageActions } from '../constants';
+
+export const getMessage = (action: MessageActions, data: any, taskObj?: ITask): TWorkerMessage => {
+  const result: TWorkerMessage = {
     action,
     data,
   };
@@ -27,6 +16,7 @@ export const getMessage = (
   }
   return result;
 };
+
 export const getRemoteWorker = (_path: any) => {
   const content = `importScripts("${_path}");`;
   return URL.createObjectURL(new Blob([content], { type: 'text/javascript' }));

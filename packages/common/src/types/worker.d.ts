@@ -1,6 +1,13 @@
 import { AxiosRequestConfig } from "axios";
 import { MessageActions, WorkerStatus } from '../constants';
 
+interface ITask {
+  public taskSets: TTaskSets;
+  public queue: TTask[];
+  public status: WorkerStatus;
+  public initializedStatus: WorkerStatus;
+}
+
 type TTaskSets = {
   url: string;
   delay: number;

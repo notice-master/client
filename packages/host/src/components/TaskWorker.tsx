@@ -1,9 +1,8 @@
 import { CaretRightOutlined, PauseOutlined } from '@ant-design/icons';
+import { getMessage, getRemoteWorker, MessageActions, WorkerStatus } from '@nmc/common';
 import { Button, Col, Progress, Row, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { WorkerUrl } from '../constants';
-import { MessageActions, WorkerStatus } from '@nmc/common';
-import { getMessage, getRemoteWorker } from '../utils';
 
 type TaskWorkerProps = {
   id?: string;

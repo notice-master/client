@@ -1,1 +1,1 @@
-export * from './WorkerHelper';
+export * from './intl';

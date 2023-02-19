@@ -1,1 +1,1 @@
-type SupportedLocales = 'en' | 'it';
+export type SupportedLocales = 'en' | 'it';

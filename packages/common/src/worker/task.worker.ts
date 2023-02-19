@@ -4,26 +4,11 @@
  */
 import axios, { AxiosRequestConfig } from "axios";
 import * as R from 'ramda';
-import { TTask, TTaskSets, TWorkerMessage } from "src/types/worker";
+import { ITask, TTask, TTaskSets } from "src/types/worker";
 import { MessageActions, WorkerStatus } from '../constants';
+import { getMessage } from '../utils';
 
-const getMessage = (action: MessageActions, data: any, taskObj: Task): TWorkerMessage => {
-  const result: TWorkerMessage = {
-    action,
-    data,
-  };
-  if (taskObj) {
-    const status = {
-      name: taskObj?.status,
-      total: taskObj?.taskSets.total,
-      finished: taskObj?.taskSets.finished,
-    };
-    result.status = status;
-  }
-  return result;
-};
-
-class Task {
+class Task implements ITask{
   public taskSets: TTaskSets;
   public queue: TTask[];
   public status: WorkerStatus;
@@ -61,7 +46,10 @@ class Task {
         }
 
         if (tasks.length) {
-          this.queue.push(...tasks);
+          const taskCounts = this.queue.push(...tasks);
+          if(this.taskSets.total < taskCounts) {
+            this.taskSets.total = taskCounts;
+          }
         }
         break;
       case MessageActions.run:
