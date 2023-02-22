@@ -16,6 +16,8 @@ module.exports = defineConfig(({ mode }) => {
       port: 8001,
     },
     webpackChain: (wpChain) => {
+      wpChain.entry('worker/task.worker').add('src/worker/task.worker.ts').end()
+      wpChain.output.filename('static/js/[name].js');
       wpChain.plugin("VanillaExtractPlugin").use(new VanillaExtractPlugin());
       wpChain.plugin('copy').use(CopyPlugin, [
         {

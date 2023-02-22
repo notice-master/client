@@ -66,9 +66,9 @@ jobs:
           # specify exclude the given comma separated directories
           exclude: worker.js.map,index.js # optional
           # specify dist of the local directory
-          dist: packages/common/dist/esm/
+          dist: packages/host/dist/static/js/worker
           # specify remote path for the files
-          saveroot: modules/notice_master/packages/common/
+          saveroot: modules/notice_master/packages/host/
         env:
           UPTOC_UPLOADER_AK: ${{ secrets.QINIU_ACCESS_KEY }}
           UPTOC_UPLOADER_SK: ${{ secrets.QINIU_SECRET_KEY }}

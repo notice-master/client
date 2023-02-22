@@ -1,7 +1,7 @@
 import { ITask, TWorkerMessage } from "src/types/worker";
 import { MessageActions } from '../constants';
 
-export const getMessage = (action: MessageActions, data: any, taskObj?: ITask): TWorkerMessage => {
+export const getMessage = (action: MessageActions, data?: any, taskObj?: ITask): TWorkerMessage => {
   const result: TWorkerMessage = {
     action,
     data,
@@ -18,6 +18,9 @@ export const getMessage = (action: MessageActions, data: any, taskObj?: ITask): 
 };
 
 export const getRemoteWorker = (_path: any) => {
-  const content = `importScripts("${_path}");`;
-  return URL.createObjectURL(new Blob([content], { type: 'text/javascript' }));
+  if(true) {
+    return '/static/js/worker/task.worker.js';
+  } else {
+    return URL.createObjectURL(new Blob([`importScripts("${_path}");`], { type: 'text/javascript' }));
+  }
 };

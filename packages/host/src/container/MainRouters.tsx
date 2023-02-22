@@ -4,7 +4,7 @@ import { Alert, Col, Layout, Row } from 'antd';
 import React, { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import BreadcrumbContent from '../components/BreadcrumbContent';
-import { routes } from '../constants';
+import { routes } from '../routes';
 import NotFoundPage from './NotFoundPage';
 interface MainRoutersProps {
   wrapper?: React.FunctionComponent;
