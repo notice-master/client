@@ -5,3 +5,9 @@ export enum WorkerStatus {
   'running' = 'running',
   'paused' = 'paused',
 }
+
+export enum TaskStatus {
+  'pending' = 'pending',
+  'successed' = 'successed',
+  'failed' = 'failed',
+}

@@ -2,101 +2,145 @@
  * @version 1.0.0
  * @Author Kylong
  */
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from 'axios';
 import * as R from 'ramda';
-import { ITask, TTask, TTaskSets } from "src/types/worker";
-import { MessageActions, WorkerStatus } from '../constants';
-import { getMessage } from '../utils';
+import {
+  ITask,
+  TTask,
+  TTaskConfig,
+  TTaskResult,
+  TTaskState,
+} from 'src/types/worker';
+import {
+  MessageActions,
+  WorkerStatus,
+  TaskStatus,
+  INDEXED_STORE_PREFIX,
+  PROCESS_STATUS_STORE_NAME,
+} from '../constants';
+import { IDBPDatabase } from 'idb';
+import { getMessage, getTaskDBInstance } from '../utils';
 
-class Task implements ITask{
-  public taskSets: TTaskSets;
-  public queue: TTask[];
-  public status: WorkerStatus;
+class Task implements ITask {
+  public taskConfig: TTaskConfig;
+  public defaultRequestConfig: AxiosRequestConfig;
+  public state: TTaskState;
   public initializedStatus: WorkerStatus;
+  public db: IDBPDatabase | undefined;
+
   constructor() {
-    this.taskSets = {
-      url: '',
+    this.taskConfig = {
       delay: 500,
+      taskId: '',
+      processId: '',
+    };
+    this.defaultRequestConfig = {};
+    this.state = {
+      status: WorkerStatus.pending,
       total: 0,
       finished: 0,
+      pending: 0,
+      successed: 0,
+      failed: 0,
     };
-    this.queue = [];
-    this.status = WorkerStatus.pending;
     this.initializedStatus = WorkerStatus.uninitialized;
+    this.db = undefined;
   }
-  handleMessage(event: Event & { data?: any}) {
+  get storeName() {
+    return `${INDEXED_STORE_PREFIX}${this.taskConfig.processId}`;
+  }
+  handleMessage(event: Event & { data?: any }) {
     const { data: messageData } = event;
     console.log('messageData: ', messageData);
     switch (messageData.action) {
       case MessageActions.setup:
-        const { tasks = [], ...rest } = messageData.data;
-        this.taskSets = {
-          ...this.taskSets,
-          ...rest,
-        };
+        const {
+          tasks = [],
+          defaultRequestConfig = {},
+          taskConfig = {},
+          ...rest
+        } = messageData.data;
+        this.defaultRequestConfig = R.mergeDeepLeft(
+          defaultRequestConfig,
+          this.defaultRequestConfig
+        );
+        this.taskConfig = R.mergeDeepLeft(taskConfig, this.taskConfig);
+        this.state.total = Math.max(this.state.total, taskConfig.total);
         // first setup
         if (this.initializedStatus === WorkerStatus.uninitialized) {
           this.initializedStatus = WorkerStatus.initialized;
+          getTaskDBInstance(this.taskConfig.taskId).then(async (_db) => {
+            this.db = _db;
+          });
           const readyMessage = getMessage(
             MessageActions.ready,
-            { ...this.taskSets },
+            { ...this.taskConfig },
             this
           );
           postMessage(readyMessage);
-        }
-
-        if (tasks.length) {
-          const taskCounts = this.queue.push(...tasks);
-          if(this.taskSets.total < taskCounts) {
-            this.taskSets.total = taskCounts;
-          }
         }
         break;
       case MessageActions.run:
         if (
           this.initializedStatus === WorkerStatus.initialized &&
-          [WorkerStatus.paused, WorkerStatus.pending].includes(this.status)
+          [WorkerStatus.paused, WorkerStatus.pending].includes(
+            this.state.status
+          )
         ) {
-          this.status = WorkerStatus.running;
+          this.state.status = WorkerStatus.running;
           this.run();
         }
         break;
       case MessageActions.pause:
-        if (this.status === WorkerStatus.running) {
-          this.status = WorkerStatus.paused;
+        if (this.state.status === WorkerStatus.running) {
+          this.state.status = WorkerStatus.paused;
         }
         break;
     }
     this.updateStatus();
   }
-  updateStatus() {
-    const updatedMessage = getMessage(
-      MessageActions.updated,
-      {
-        taskSets: this.taskSets,
-        taskCounts: this.queue.length,
-      },
-      this
-    );
-    postMessage(updatedMessage);
-  }
-  run() {
-    if (this.status === WorkerStatus.running) {
+
+  async run() {
+    if (this.state.status === WorkerStatus.running) {
       setTimeout(async () => {
-        const task = this.queue.shift();
-        if (task) {
-          try {
-            await this.execute(this.getFinalRequest(task), task);
-          } catch (err) {
-            console.log('err: ', err);
-          }
-        }
+        this?.db
+          ?.transaction(this.storeName, 'readonly')
+          .store.index('status')
+          .get(IDBKeyRange.only(TaskStatus.pending))
+          .then(async (task) => {
+            if (task && (!task.status || task.status === TaskStatus.pending)) {
+              const result: TTaskResult = {
+                response: null,
+                status: TaskStatus.pending,
+                error: undefined,
+                task: task,
+              };
+              try {
+                const { data } = await this.execute(
+                  this.getFinalRequest(task.config)
+                );
+                // TODO: allow custom check logic
+                const { errcode } = data;
+                if (errcode) {
+                  throw data;
+                } else {
+                  result.response = data;
+                  result.status = TaskStatus.successed;
+                }
+              } catch (err) {
+                result.error = err;
+                result.status = TaskStatus.failed;
+              }
+
+              this.updateStatus(result);
+            }
+          });
         this.run();
-      }, this.taskSets.delay);
+      }, this.taskConfig.delay);
     }
   }
   getFinalRequest(task: TTask) {
-    const mergedTask = R.mergeDeepLeft(task, this.taskSets);
+    const mergedTask = R.mergeDeepLeft(task, this.defaultRequestConfig);
     return {
       url: mergedTask.url,
       params: mergedTask.params,
@@ -105,31 +149,43 @@ class Task implements ITask{
       method: mergedTask.method,
     };
   }
-  execute(config: AxiosRequestConfig, task: TTask) {
-    const { action } = task;
+  execute(config: AxiosRequestConfig) {
     return axios
       .request(config)
-      .then((response) => {
-        this.conveyResult(response, action);
-      })
-      .catch((error) => {
-        this.conveyResult(error, action);
-      });
+      .then((response) => response)
+      .catch((error) => error);
   }
-  conveyResult(result: any, action: MessageActions) {
-    switch (action) {
-      case MessageActions.response:
-        break;
-      default:
-        this.taskSets.finished++;
+  async updateStatus(result?: TTaskResult) {
+    if (this.db) {
+      if (result) {
+        const { task, ...rest } = result;
+        await this.db.put(this.storeName, { ...task, ...rest });
+      }
+      const tx = this.db?.transaction(this.storeName);
+      const total = Math.max(this.state.total, await tx.store.count());
+      const pending = await tx.store.index('status').count(TaskStatus.pending);
+      const failed = await tx.store.index('status').count(TaskStatus.failed);
+      const successed = await tx.store
+        .index('status')
+        .count(TaskStatus.successed);
+      this.state = R.mergeDeepLeft(
+        { total, pending, failed, successed, finished: failed + successed },
+        this.state
+      );
+      await this.db.put(PROCESS_STATUS_STORE_NAME, {
+        process_id: this.taskConfig.processId,
+        state: this.state,
+      });
     }
-
     const updatedMessage = getMessage(
-      MessageActions.convey,
-      JSON.parse(JSON.stringify(result)), // Only transferable objects can be transferred.
+      MessageActions.updated,
+      {
+        taskConfig: this.taskConfig,
+        taskState: this.state,
+        result: result && JSON.parse(JSON.stringify(result)), // Only transferable objects can be transferred.
+      },
       this
     );
-
     postMessage(updatedMessage);
   }
 }

@@ -10,19 +10,19 @@ interface IconsTypes {
 }
 
 type postParamsType = {
-  [key:string]: string | postParamsType
-}
+  [key: string]: string | postParamsType;
+};
 
 type taskType = {
   url?: string;
   search?: {
-    [key:string]: string, 
+    [key: string]: string;
   };
   params?: postParamsType;
   type?: string;
   method?: string;
   headers?: {
-    [key:string]: string, 
+    [key: string]: string;
   };
 };
 type taskSetsType = taskType & {
@@ -37,7 +37,7 @@ interface TaskInterface {
 interface TaskHelperInterface {
   worker: Worker;
   status: string;
-  push: (tasks: taskType[]) => void;
+  // push: (tasks: taskType[]) => void;
   run: () => void;
   pause: () => void;
 }

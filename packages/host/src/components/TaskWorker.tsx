@@ -1,13 +1,16 @@
 import { CaretRightOutlined, PauseOutlined } from '@ant-design/icons';
+import { AxiosRequestConfig } from 'axios';
 import { Button, Col, Progress, Row, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { MessageActions, WorkerStatus, WorkerUrl } from '../constants';
 import { getMessage, getRemoteWorker } from '../utils';
+import { TTaskConfig } from 'src/types/worker';
 
 type TaskWorkerProps = {
   id?: string;
   index?: number;
-  defaultTaskSets: taskSetsType;
+  taskConfig: TTaskConfig;
+  defaultRequestConfig: AxiosRequestConfig;
   onWorkerReady: (data: TaskHelper, id: string) => void;
   onDestroy: (id: string) => void;
 };
@@ -18,13 +21,13 @@ class TaskHelper implements TaskHelperInterface {
     this.worker = worker;
     this.status = WorkerStatus.uninitialized;
   }
-  push(tasks: taskType[]) {
-    this.worker.postMessage(
-      getMessage(MessageActions.setup, {
-        tasks: [...tasks],
-      })
-    );
-  }
+  // push(tasks: taskType[]) {
+  //   this.worker.postMessage(
+  //     getMessage(MessageActions.setup, {
+  //       tasks: [...tasks],
+  //     })
+  //   );
+  // }
   pause() {
     this.worker.postMessage(getMessage(MessageActions.pause));
   }
@@ -36,10 +39,21 @@ class TaskHelper implements TaskHelperInterface {
   }
 }
 const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
-  const { onWorkerReady, onDestroy, defaultTaskSets, id, index } = props;
+  const {
+    onWorkerReady,
+    onDestroy,
+    defaultRequestConfig,
+    id,
+    index,
+    taskConfig,
+  } = props;
   const [status, setStatus] = useState(WorkerStatus.uninitialized);
   const [workerHelper, setWorkerHelper] = useState<TaskHelper>();
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState({
+    total: 0,
+    finished: 0,
+    percent: 0,
+  });
   const handleMessage = (_message: any, _worker: Worker) => {
     const { status } = _message;
     const { total, finished } = status;
@@ -49,14 +63,16 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
           onWorkerReady(workerHelper, id);
         }
         break;
-      case MessageActions.convey:
-        if (total > 0 && finished > 0) {
-          setProgress(Number(((finished / total) * 100).toFixed(2)));
-        }
-        break;
       case MessageActions.response:
         break;
       case MessageActions.updated:
+        if (total > 0 && finished > 0) {
+          setProgress({
+            total,
+            finished,
+            percent: Number(((finished / total) * 100).toFixed(2)),
+          });
+        }
         break;
       default:
         break;
@@ -93,7 +109,10 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
         handleMessage(messageData, workerHelper.worker);
       };
       workerHelper.worker.postMessage(
-        getMessage(MessageActions.setup, defaultTaskSets)
+        getMessage(MessageActions.setup, {
+          taskConfig,
+          defaultRequestConfig,
+        })
       );
     }
   }, [workerHelper]);
@@ -106,9 +125,10 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
       style={{ padding: '5px 0' }}
     >
       <Col style={{ width: '30px', textAlign: 'right' }}>{index}</Col>
-      <Col flex="auto">
-        <Progress percent={progress} />
+      <Col flex="auto" style={{ paddingRight: '2rem' }}>
+        <Progress percent={progress.percent} />
       </Col>
+      <Col>{`${progress.finished}/${progress.total}`}</Col>
       <Col>
         <Space>
           <Button

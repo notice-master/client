@@ -34,6 +34,11 @@ export const globalMessages: messageMap = defineMessages({
     description: 'Message to list of the Navigator.',
     defaultMessage: '任务',
   },
+  executor: {
+    id: `${scope}.executor`,
+    description: 'Task executor',
+    defaultMessage: '执行器',
+  },
   unknow: {
     id: `${scope}.unknow`,
     description: 'Message to overview of the Navigator.',

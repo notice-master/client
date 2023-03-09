@@ -25,7 +25,6 @@ importers:
       browserslist: ^4.21.4
       eslint: ^8.31.0
       graphql: ^16.6.0
-      idb: ^7.1.1
       react: ^18.2.0
       react-dom: ^18.2.0
       react-intl: ^6.2.5
@@ -39,7 +38,6 @@ importers:
       '@reduxjs/toolkit': 1.9.1_k4ae6lp43ej6mezo3ztvx6pykq
       axios: 0.21.4
       graphql: 16.6.0
-      idb: 7.1.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-intl: 6.2.5_react@18.2.0
@@ -70,6 +68,7 @@ importers:
       axios: ^0.21.4
       browserslist: ^4.21.4
       eslint: ^8.31.0
+      idb: ^7.1.1
       ramda: ^0.28.0
       rc-field-form: ^1.27.3
       react: ^18.2.0
@@ -83,6 +82,7 @@ importers:
       '@types/ramda': 0.28.22
       antd: 5.1.2_biqbaboplfbrettd7655fr4n2y
       axios: 0.21.4
+      idb: 7.1.1
       ramda: 0.28.0
       rc-field-form: 1.27.3_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0

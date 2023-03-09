@@ -1,4 +1,3 @@
-export * from 'idb';
 export * from 'redux-injectors';
 export * from './constants';
 export { default as CommonProviders } from './container/CommonProviders';

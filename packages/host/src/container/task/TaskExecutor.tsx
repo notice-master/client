@@ -1,118 +1,99 @@
-import { openDB, setCurrentPageInfo, useAppDispatch } from '@nmc/common';
+import { setCurrentPageInfo, useAppDispatch } from '@nmc/common';
+import { IDBPDatabase, openDB } from 'idb';
 import { Button, Col, Input, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import useBeforeUnload from 'use-before-unload';
+import { AxiosRequestConfig } from 'axios';
 import TaskWorker from '../../components/TaskWorker';
+import { TTaskConfig } from 'src/types/worker';
+import { getTaskDBInstance } from '../../utils';
+import { INDEXED_STORE_PREFIX, TaskStatus } from 'src/constants';
 
 type WorkerPoolType = {
-  [key: string]: { key: string; taskHelper?: TaskHelperInterface };
+  [key: string]: {
+    key: string;
+    taskHelper?: TaskHelperInterface;
+  };
 };
-
-async function doDatabaseStuff() {
-  const db = await openDB('testDB', 1, {
-    upgrade(db, oldVersion, newVersion, transaction, event) {
-      const store = db.createObjectStore('testStore', {
-        keyPath: 'id',
-        autoIncrement: true
-      });
-      store.createIndex('date', 'date');
-    },
-    blocked(currentVersion, blockedVersion, event) {
-    },
-    blocking(currentVersion, blockedVersion, event) {
-    },
-    terminated() {
-    },
-  });
-  // db.put('test', 'testKey', 1)
-  await db.add('testStore', {
-    title: 'Article 1',
-    date: new Date('2019-01-01'),
-    body: '…',
-  });
-
-  const tx = db.transaction('testStore', 'readwrite');
-  await Promise.all([
-    tx.store.add({
-      title: 'Article 2',
-      date: new Date('2019-01-01'),
-      body: '…',
-    }),
-    tx.store.add({
-      title: 'Article 3',
-      date: new Date('2019-01-02'),
-      body: '…',
-    }),
-    tx.done,
-  ]);
-  console.log(await db.getAllFromIndex('testStore', 'date'));
-}
 
 const TaskExecutor = () => {
   const dispatch = useAppDispatch();
   const [threadCounts, setThreadCounts] = useState(10);
-  const [defaultTaskSets, setDefaultTaskSets] = useState({
-    url: 'https://w.1717shua.cn/addons/zjl_mass_tpl_msg/apiAgent.php',
-    // url: 'https://agent.1717shua.cn/cgi-bin/template/api_add_template',
-    delay: 0,
-    params: {
-      api: 'message/template/send',
-      access_token: 'test_token',
-    },
-    data: {
-      touser: 'ot7Ngwyd0fEwZqq_DCZ6Yt9xQ6Qc',
-      template_id: 'f1DPMaEr-Q8WRYxmgxG67YCD8zoOOuyJCpel1OJEax0',
-      url: '',
-      miniprogram: { appid: '', pagepath: '' },
-      data: {
-        first: { value: '', color: '#000000' },
-        keyword1: { value: '', color: '#000000' },
-        keyword2: { value: '', color: '#000000' },
-        remark: { value: '', color: '#000000' },
-      },
-    },
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    total: 50,
+  const [db, setDB] = useState<IDBPDatabase>();
+  const [taskConfig, setTaskConfig] = useState({
+    delay: 500,
+    total: 83,
     finished: 0,
+    taskId: '1',
   });
+  const [defaultRequestConfig, setDefaultRequestConfig] =
+    useState<AxiosRequestConfig>({
+      url: 'https://w.1717shua.cn/addons/zjl_mass_tpl_msg/apiAgent.php',
+      // url: 'https://agent.1717shua.cn/cgi-bin/template/api_add_template',
+      params: {
+        api: 'message/template/send',
+        access_token: 'test_token',
+      },
+      data: {
+        touser: 'ot7Ngwyd0fEwZqq_DCZ6Yt9xQ6Qc',
+        template_id: 'f1DPMaEr-Q8WRYxmgxG67YCD8zoOOuyJCpel1OJEax0',
+        url: '',
+        miniprogram: { appid: '', pagepath: '' },
+        data: {
+          first: { value: '', color: '#000000' },
+          keyword1: { value: '', color: '#000000' },
+          keyword2: { value: '', color: '#000000' },
+          remark: { value: '', color: '#000000' },
+        },
+      },
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
   const [state, setState] = useState(false);
   const [workerPool, setWorkerPool] = useState<WorkerPoolType>({});
   useBeforeUnload((event) => {
-    if(state) {
+    if (state) {
       return '任务已创建,确定要离开?';
     } else {
       return true;
     }
   });
-  const init = () => {
+  const init = async () => {
     if (!state) {
       setState(true);
       console.log('threadCounts: ', threadCounts);
       const tasksObj: WorkerPoolType = {};
-      new Array(threadCounts).fill('').forEach(() => {
+      new Array(threadCounts).fill('').forEach((val, index) => {
         const key = Math.random().toString(32).substring(3);
         tasksObj[key] = { key };
       });
+      setDB(await getTaskDBInstance(taskConfig.taskId, threadCounts));
       setWorkerPool(tasksObj);
-      
     }
   };
   const reset = () => {
     setState(false);
   };
   const testPush = () => {
-    Object.values(workerPool).forEach(({ taskHelper }) => {
-      if (!taskHelper) return;
-      taskHelper.push(
-        new Array(50).fill({
-          params: {
-            touser: Math.random().toString(32),
+    Object.values(workerPool).forEach(async ({ taskHelper }, index) => {
+      if (!taskHelper || !db) return;
+      const storeName = `${INDEXED_STORE_PREFIX}${index + 1}`;
+      const tx = db.transaction(storeName, 'readwrite');
+      const tasks = new Array(10).fill('').map(() => {
+        const openid = Math.random().toString(32).substring(3);
+        return tx.store.add({
+          id: openid,
+          config: {
+            params: {
+              touser: openid,
+            },
           },
-        })
-      );
+          status: TaskStatus.pending,
+        });
+      });
+      await Promise.all([...tasks, tx.done]);
     });
   };
   const run = () => {
@@ -134,7 +115,6 @@ const TaskExecutor = () => {
         subtitle: '',
       })
     );
-    doDatabaseStuff();
   }, []);
 
   const isAllWorkerReady = useMemo(() => {
@@ -146,7 +126,11 @@ const TaskExecutor = () => {
   }, [workerPool]);
 
   return (
-    <Spin spinning={state && !isAllWorkerReady} size="large" tip={'正在创建任务....'}>
+    <Spin
+      spinning={state && !isAllWorkerReady}
+      size="large"
+      tip={'正在创建任务....'}
+    >
       <Row gutter={5} align="middle">
         <Col>进程数:</Col>
         <Col>
@@ -194,7 +178,11 @@ const TaskExecutor = () => {
                 id={workerObj.key}
                 key={workerObj.key}
                 index={index + 1}
-                defaultTaskSets={defaultTaskSets}
+                taskConfig={{
+                  ...taskConfig,
+                  processId: (index + 1).toString(),
+                }}
+                defaultRequestConfig={defaultRequestConfig}
                 onWorkerReady={(
                   taskHelper: TaskHelperInterface,
                   id: string
