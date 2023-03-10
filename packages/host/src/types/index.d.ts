@@ -1,3 +1,5 @@
+import { TTaskState } from './worker';
+
 type MenuItem = {
   key: string;
   title: string;
@@ -13,31 +15,9 @@ type postParamsType = {
   [key: string]: string | postParamsType;
 };
 
-type taskType = {
-  url?: string;
-  search?: {
-    [key: string]: string;
-  };
-  params?: postParamsType;
-  type?: string;
-  method?: string;
-  headers?: {
-    [key: string]: string;
-  };
-};
-type taskSetsType = taskType & {
-  url: string;
-  delay: number;
-};
-interface TaskInterface {
-  taskSets: taskSetsType;
-  queue: taskType[];
-  handleMessage: (event: MessageEvent) => any;
-}
-interface TaskHelperInterface {
+interface IProcessInterface {
   worker: Worker;
-  status: string;
-  // push: (tasks: taskType[]) => void;
+  state: TTaskState;
   run: () => void;
   pause: () => void;
 }

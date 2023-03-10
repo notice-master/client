@@ -1,22 +1,18 @@
-import { ITask, TWorkerMessage } from 'src/types/worker';
+import { ITaskWorker, TWorkerMessage } from 'src/types/worker';
 import { MessageActions } from '../constants';
 
 export const getMessage = (
   action: MessageActions,
   data?: any,
-  taskObj?: ITask
+  taskObj?: ITaskWorker
 ): TWorkerMessage => {
   const result: TWorkerMessage = {
     action,
     data,
   };
   if (taskObj) {
-    const status = {
-      name: taskObj?.state.status,
-      total: taskObj?.state.total,
-      finished: taskObj?.state.finished,
-    };
-    result.status = status;
+    result.state = taskObj?.state;
+    result.config = taskObj?.config;
   }
   return result;
 };

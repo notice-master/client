@@ -4,40 +4,18 @@ import { Button, Col, Progress, Row, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { MessageActions, WorkerStatus, WorkerUrl } from '../constants';
 import { getMessage, getRemoteWorker } from '../utils';
-import { TTaskConfig } from 'src/types/worker';
+import { TTaskConfig, TTaskState, TWorkerMessage } from 'src/types/worker';
+import { ProcessHelper } from '../utils';
 
 type TaskWorkerProps = {
   id?: string;
   index?: number;
   taskConfig: TTaskConfig;
   defaultRequestConfig: AxiosRequestConfig;
-  onWorkerReady: (data: TaskHelper, id: string) => void;
+  onWorkerReady: (data: ProcessHelper, id: string) => void;
   onDestroy: (id: string) => void;
 };
-class TaskHelper implements TaskHelperInterface {
-  public worker;
-  public status: string;
-  constructor(worker: Worker) {
-    this.worker = worker;
-    this.status = WorkerStatus.uninitialized;
-  }
-  // push(tasks: taskType[]) {
-  //   this.worker.postMessage(
-  //     getMessage(MessageActions.setup, {
-  //       tasks: [...tasks],
-  //     })
-  //   );
-  // }
-  pause() {
-    this.worker.postMessage(getMessage(MessageActions.pause));
-  }
-  run() {
-    this.worker.postMessage(getMessage(MessageActions.run));
-  }
-  setUp(taskSets: taskSetsType) {
-    this.worker.postMessage(getMessage(MessageActions.setup, taskSets));
-  }
-}
+
 const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
   const {
     onWorkerReady,
@@ -47,20 +25,27 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
     index,
     taskConfig,
   } = props;
-  const [status, setStatus] = useState(WorkerStatus.uninitialized);
-  const [workerHelper, setWorkerHelper] = useState<TaskHelper>();
+  const [state, setState] = useState<TTaskState>({
+    status: WorkerStatus.pending,
+    total: 0,
+    finished: 0,
+    pending: 0,
+    successed: 0,
+    failed: 0,
+  });
+  const [processHelper, setProcessHelper] = useState<ProcessHelper>();
   const [progress, setProgress] = useState({
     total: 0,
     finished: 0,
     percent: 0,
   });
-  const handleMessage = (_message: any, _worker: Worker) => {
-    const { status } = _message;
-    const { total, finished } = status;
+  const handleMessage = (_message: TWorkerMessage, _worker: Worker) => {
+    const { state } = _message;
+    const { total = 0, finished = 0 } = state || {};
     switch (_message.action) {
       case MessageActions.ready:
-        if (typeof onWorkerReady === 'function' && workerHelper && id) {
-          onWorkerReady(workerHelper, id);
+        if (typeof onWorkerReady === 'function' && processHelper && id) {
+          onWorkerReady(processHelper, id);
         }
         break;
       case MessageActions.response:
@@ -77,16 +62,15 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
       default:
         break;
     }
-    if (workerHelper) {
-      workerHelper.status = status?.name;
-      setStatus(status?.name);
+    if (processHelper) {
+      setState(processHelper.state);
     }
   };
   useEffect(() => {
     let tempWorker: Worker | null;
     try {
       tempWorker = new Worker(getRemoteWorker(WorkerUrl));
-      setWorkerHelper(new TaskHelper(tempWorker));
+      setProcessHelper(new ProcessHelper(tempWorker, state));
     } catch (error) {
       console.error('error: ', error);
       tempWorker = null;
@@ -103,19 +87,19 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (workerHelper) {
-      workerHelper.worker.onmessage = (message) => {
+    if (processHelper) {
+      processHelper.worker.onmessage = (message) => {
         const { data: messageData } = message;
-        handleMessage(messageData, workerHelper.worker);
+        handleMessage(messageData, processHelper.worker);
       };
-      workerHelper.worker.postMessage(
+      processHelper.worker.postMessage(
         getMessage(MessageActions.setup, {
           taskConfig,
           defaultRequestConfig,
         })
       );
     }
-  }, [workerHelper]);
+  }, [processHelper]);
 
   return (
     <Row
@@ -135,14 +119,14 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
             size="small"
             type="primary"
             disabled={
-              !workerHelper ||
+              !processHelper ||
               status === WorkerStatus.uninitialized ||
               status === WorkerStatus.running
             }
             shape="circle"
             onClick={() => {
-              if (workerHelper) {
-                workerHelper.run();
+              if (processHelper) {
+                processHelper.run();
               }
             }}
             icon={<CaretRightOutlined />}
@@ -151,14 +135,14 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
             size="small"
             type="primary"
             disabled={
-              !workerHelper ||
+              !processHelper ||
               status === WorkerStatus.uninitialized ||
               status !== WorkerStatus.running
             }
             shape="circle"
             onClick={() => {
-              if (workerHelper) {
-                workerHelper.pause();
+              if (processHelper) {
+                processHelper.pause();
               }
             }}
             icon={<PauseOutlined />}

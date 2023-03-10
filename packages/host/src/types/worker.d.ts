@@ -2,8 +2,8 @@ import { AxiosRequestConfig } from 'axios';
 import { IDBPDatabase } from 'idb';
 import { MessageActions, WorkerStatus } from '../constants';
 
-interface ITask {
-  taskConfig: TTaskSets;
+interface ITaskWorker {
+  config: TTaskConfig;
   defaultRequestConfig: AxiosRequestConfig;
   state: TTaskState;
   initializedStatus: WorkerStatus;
@@ -25,12 +25,6 @@ type TTaskState = {
   failed: number;
 };
 
-type TTask = {
-  id: string;
-  index: number;
-  action: MessageActions;
-};
-
 type TTaskResult<T = any> = {
   response: any;
   status: TaskStatus;
@@ -38,14 +32,9 @@ type TTaskResult<T = any> = {
   task: T;
 };
 
-type TTaskStatus = {
-  name: WorkerStatus;
-  total: number;
-  finished: number;
-};
-
 type TWorkerMessage = {
   action: MessageActions;
   data: any;
-  status?: TTaskStatus | undefined;
+  state?: TTaskState | undefined;
+  config?: TTaskConfig | undefined;
 };

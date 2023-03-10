@@ -6,13 +6,13 @@ import useBeforeUnload from 'use-before-unload';
 import { AxiosRequestConfig } from 'axios';
 import TaskWorker from '../../components/TaskWorker';
 import { TTaskConfig } from 'src/types/worker';
-import { getTaskDBInstance } from '../../utils';
+import { getTaskDBInstance, ProcessHelper } from '../../utils';
 import { INDEXED_STORE_PREFIX, TaskStatus } from 'src/constants';
 
 type WorkerPoolType = {
   [key: string]: {
     key: string;
-    taskHelper?: TaskHelperInterface;
+    processHelper?: ProcessHelper;
   };
 };
 
@@ -77,8 +77,8 @@ const TaskExecutor = () => {
     setState(false);
   };
   const testPush = () => {
-    Object.values(workerPool).forEach(async ({ taskHelper }, index) => {
-      if (!taskHelper || !db) return;
+    Object.values(workerPool).forEach(async ({ processHelper }, index) => {
+      if (!processHelper || !db) return;
       const storeName = `${INDEXED_STORE_PREFIX}${index + 1}`;
       const tx = db.transaction(storeName, 'readwrite');
       const tasks = new Array(10).fill('').map(() => {
@@ -97,15 +97,15 @@ const TaskExecutor = () => {
     });
   };
   const run = () => {
-    Object.values(workerPool).forEach(({ taskHelper }) => {
-      if (!taskHelper) return;
-      taskHelper.run();
+    Object.values(workerPool).forEach(({ processHelper }) => {
+      if (!processHelper) return;
+      processHelper.run();
     });
   };
   const pause = () => {
-    Object.values(workerPool).forEach(({ taskHelper }) => {
-      if (!taskHelper) return;
-      taskHelper.pause();
+    Object.values(workerPool).forEach(({ processHelper }) => {
+      if (!processHelper) return;
+      processHelper.pause();
     });
   };
   useEffect(() => {
@@ -120,8 +120,8 @@ const TaskExecutor = () => {
   const isAllWorkerReady = useMemo(() => {
     const values = Object.values(workerPool);
     if (!values.length) return false;
-    return values.every(({ taskHelper }) => {
-      return !!taskHelper;
+    return values.every(({ processHelper }) => {
+      return !!processHelper;
     });
   }, [workerPool]);
 
@@ -183,11 +183,8 @@ const TaskExecutor = () => {
                   processId: (index + 1).toString(),
                 }}
                 defaultRequestConfig={defaultRequestConfig}
-                onWorkerReady={(
-                  taskHelper: TaskHelperInterface,
-                  id: string
-                ) => {
-                  workerPool[id].taskHelper = taskHelper;
+                onWorkerReady={(processHelper: ProcessHelper, id: string) => {
+                  workerPool[id].processHelper = processHelper;
                   setWorkerPool({ ...workerPool });
                 }}
                 onDestroy={(id) => {

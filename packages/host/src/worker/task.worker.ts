@@ -5,8 +5,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import * as R from 'ramda';
 import {
-  ITask,
-  TTask,
+  ITaskWorker,
   TTaskConfig,
   TTaskResult,
   TTaskState,
@@ -21,15 +20,15 @@ import {
 import { IDBPDatabase } from 'idb';
 import { getMessage, getTaskDBInstance } from '../utils';
 
-class Task implements ITask {
-  public taskConfig: TTaskConfig;
+class TaskWorker implements ITaskWorker {
+  public config: TTaskConfig;
   public defaultRequestConfig: AxiosRequestConfig;
   public state: TTaskState;
   public initializedStatus: WorkerStatus;
   public db: IDBPDatabase | undefined;
 
   constructor() {
-    this.taskConfig = {
+    this.config = {
       delay: 500,
       taskId: '',
       processId: '',
@@ -47,7 +46,7 @@ class Task implements ITask {
     this.db = undefined;
   }
   get storeName() {
-    return `${INDEXED_STORE_PREFIX}${this.taskConfig.processId}`;
+    return `${INDEXED_STORE_PREFIX}${this.config.processId}`;
   }
   handleMessage(event: Event & { data?: any }) {
     const { data: messageData } = event;
@@ -57,24 +56,24 @@ class Task implements ITask {
         const {
           tasks = [],
           defaultRequestConfig = {},
-          taskConfig = {},
+          config = {},
           ...rest
         } = messageData.data;
         this.defaultRequestConfig = R.mergeDeepLeft(
           defaultRequestConfig,
           this.defaultRequestConfig
         );
-        this.taskConfig = R.mergeDeepLeft(taskConfig, this.taskConfig);
-        this.state.total = Math.max(this.state.total, taskConfig.total);
+        this.config = R.mergeDeepLeft(config, this.config);
+        this.state.total = Math.max(this.state.total, config.total);
         // first setup
         if (this.initializedStatus === WorkerStatus.uninitialized) {
           this.initializedStatus = WorkerStatus.initialized;
-          getTaskDBInstance(this.taskConfig.taskId).then(async (_db) => {
+          getTaskDBInstance(this.config.taskId).then(async (_db) => {
             this.db = _db;
           });
           const readyMessage = getMessage(
             MessageActions.ready,
-            { ...this.taskConfig },
+            { ...this.config },
             this
           );
           postMessage(readyMessage);
@@ -136,10 +135,10 @@ class Task implements ITask {
             }
           });
         this.run();
-      }, this.taskConfig.delay);
+      }, this.config.delay);
     }
   }
-  getFinalRequest(task: TTask) {
+  getFinalRequest(task: AxiosRequestConfig) {
     const mergedTask = R.mergeDeepLeft(task, this.defaultRequestConfig);
     return {
       url: mergedTask.url,
@@ -173,15 +172,13 @@ class Task implements ITask {
         this.state
       );
       await this.db.put(PROCESS_STATUS_STORE_NAME, {
-        process_id: this.taskConfig.processId,
+        process_id: this.config.processId,
         state: this.state,
       });
     }
     const updatedMessage = getMessage(
       MessageActions.updated,
       {
-        taskConfig: this.taskConfig,
-        taskState: this.state,
         result: result && JSON.parse(JSON.stringify(result)), // Only transferable objects can be transferred.
       },
       this
@@ -189,7 +186,7 @@ class Task implements ITask {
     postMessage(updatedMessage);
   }
 }
-const worker = new Task();
+const worker = new TaskWorker();
 console.log('worker with js version: ', worker);
 addEventListener('message', function (event) {
   worker.handleMessage(event);
