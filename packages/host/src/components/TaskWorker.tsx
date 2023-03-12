@@ -10,21 +10,15 @@ import { ProcessHelper } from '../utils';
 type TaskWorkerProps = {
   id?: string;
   index?: number;
-  taskConfig: TTaskConfig;
+  config: TTaskConfig;
   defaultRequestConfig: AxiosRequestConfig;
   onWorkerReady: (data: ProcessHelper, id: string) => void;
   onDestroy: (id: string) => void;
 };
 
 const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
-  const {
-    onWorkerReady,
-    onDestroy,
-    defaultRequestConfig,
-    id,
-    index,
-    taskConfig,
-  } = props;
+  const { onWorkerReady, onDestroy, defaultRequestConfig, id, index, config } =
+    props;
   const [state, setState] = useState<TTaskState>({
     status: WorkerStatus.pending,
     total: 0,
@@ -94,7 +88,7 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
       };
       processHelper.worker.postMessage(
         getMessage(MessageActions.setup, {
-          taskConfig,
+          config,
           defaultRequestConfig,
         })
       );

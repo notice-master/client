@@ -20,7 +20,7 @@ const TaskExecutor = () => {
   const dispatch = useAppDispatch();
   const [threadCounts, setThreadCounts] = useState(10);
   const [db, setDB] = useState<IDBPDatabase>();
-  const [taskConfig, setTaskConfig] = useState({
+  const [config, setConfig] = useState({
     delay: 500,
     total: 83,
     finished: 0,
@@ -69,7 +69,7 @@ const TaskExecutor = () => {
         const key = Math.random().toString(32).substring(3);
         tasksObj[key] = { key };
       });
-      setDB(await getTaskDBInstance(taskConfig.taskId, threadCounts));
+      setDB(await getTaskDBInstance(config.taskId, threadCounts));
       setWorkerPool(tasksObj);
     }
   };
@@ -178,8 +178,8 @@ const TaskExecutor = () => {
                 id={workerObj.key}
                 key={workerObj.key}
                 index={index + 1}
-                taskConfig={{
-                  ...taskConfig,
+                config={{
+                  ...config,
                   processId: (index + 1).toString(),
                 }}
                 defaultRequestConfig={defaultRequestConfig}

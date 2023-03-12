@@ -64,6 +64,10 @@ class TaskWorker implements ITaskWorker {
           this.defaultRequestConfig
         );
         this.config = R.mergeDeepLeft(config, this.config);
+        console.log(
+          '🚀 ~ file: task.worker.ts:67 ~ TaskWorker ~ handleMessage ~ config:',
+          config
+        );
         this.state.total = Math.max(this.state.total, config.total);
         // first setup
         if (this.initializedStatus === WorkerStatus.uninitialized) {

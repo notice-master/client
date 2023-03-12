@@ -5,6 +5,7 @@ import { Layout, Menu } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { menuData } from '../routes';
+import { MenuItem, IconsTypes } from '../types';
 
 const LEFT_MENU_COLLAPSED = 'LEFT_MENU_COLLAPSED';
 const LEFT_MENU_CACHED_OPEND = 'LEFT_MENU_CACHED_OPEND';
