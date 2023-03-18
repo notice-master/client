@@ -1,19 +1,16 @@
-import { TTaskState } from './worker';
+/// <reference types="react" />
+/// <reference path="worker.d.ts" />
 
 type MenuItem = {
   key: string;
   title: string;
-  icon?: string;
+  icon?: axios.AxiosRequestConfig;
   children?: MenuItem[];
 };
 
 interface IconsTypes {
-  [key: string]: ReactNode;
+  [key: string]: React.ReactNode;
 }
-
-type postParamsType = {
-  [key: string]: string | postParamsType;
-};
 
 interface IProcessInterface {
   worker: Worker;

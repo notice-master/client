@@ -5,7 +5,8 @@ import { Layout, Menu } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { menuData } from '../routes';
-import { MenuItem, IconsTypes } from '../types';
+
+type TIconNames = keyof typeof allIcons;
 
 const LEFT_MENU_COLLAPSED = 'LEFT_MENU_COLLAPSED';
 const LEFT_MENU_CACHED_OPEND = 'LEFT_MENU_CACHED_OPEND';
@@ -34,11 +35,11 @@ const LeftMenu = () => {
   const [openMenuKeys, setOpenMenuKeys] =
     useState<string[]>(defaultOpenMenuKeys);
   const [selectedMenuKeys, setSelectedMenuKeys] = useState<string[]>([]);
-  const getIcon = (key: string | undefined) => {
-    if (!key || !(allIcons as IconsTypes)[key]) {
+  const getIcon = <T extends TIconNames>(key: T | string | undefined) => {
+    if (!key || !(key in allIcons)) {
       return <></>;
     }
-    const Component = (allIcons as IconsTypes)[key] as any;
+    const Component = allIcons[key as T] as any;
     return <Component />;
   };
   const renderMenuList = (

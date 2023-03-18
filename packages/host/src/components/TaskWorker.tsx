@@ -4,7 +4,6 @@ import { Button, Col, Progress, Row, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { MessageActions, WorkerStatus, WorkerUrl } from '../constants';
 import { getMessage, getRemoteWorker } from '../utils';
-import { TTaskConfig, TTaskState, TWorkerMessage } from 'src/types/worker';
 import { ProcessHelper } from '../utils';
 
 type TaskWorkerProps = {
@@ -36,6 +35,7 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
   const handleMessage = (_message: TWorkerMessage, _worker: Worker) => {
     const { state } = _message;
     const { total = 0, finished = 0 } = state || {};
+    if (state && processHelper) processHelper.state = state;
     switch (_message.action) {
       case MessageActions.ready:
         if (typeof onWorkerReady === 'function' && processHelper && id) {
@@ -58,6 +58,10 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
     }
     if (processHelper) {
       setState(processHelper.state);
+      console.log(
+        '🚀 ~ file: TaskWorker.tsx:62 ~ handleMessage ~ processHelper.state:',
+        processHelper.state
+      );
     }
   };
   useEffect(() => {
@@ -114,8 +118,8 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
             type="primary"
             disabled={
               !processHelper ||
-              status === WorkerStatus.uninitialized ||
-              status === WorkerStatus.running
+              state.status === WorkerStatus.uninitialized ||
+              state.status === WorkerStatus.running
             }
             shape="circle"
             onClick={() => {
@@ -130,8 +134,8 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
             type="primary"
             disabled={
               !processHelper ||
-              status === WorkerStatus.uninitialized ||
-              status !== WorkerStatus.running
+              state.status === WorkerStatus.uninitialized ||
+              state.status !== WorkerStatus.running
             }
             shape="circle"
             onClick={() => {

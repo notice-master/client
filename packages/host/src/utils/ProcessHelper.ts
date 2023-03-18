@@ -16,7 +16,4 @@ export class ProcessHelper implements IProcessInterface {
   run() {
     this.worker.postMessage(getMessage(MessageActions.run));
   }
-  // setUp(taskSets: taskSetsType) {
-  //   this.worker.postMessage(getMessage(MessageActions.setup, taskSets));
-  // }
 }

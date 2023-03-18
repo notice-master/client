@@ -1,13 +1,17 @@
-import { AxiosRequestConfig } from 'axios';
-import { IDBPDatabase } from 'idb';
-import { MessageActions, WorkerStatus } from '../constants';
-
+declare namespace Axios {
+  type AxiosRequestConfig = import('axios').AxiosRequestConfig;
+}
+declare namespace Constants {
+  type WorkerStatus = import('../constants').WorkerStatus;
+  type TaskStatus = import('../constants').TaskStatus;
+  type MessageActions = import('../constants').MessageActions;
+}
 interface ITaskWorker {
   config: TTaskConfig;
-  defaultRequestConfig: AxiosRequestConfig;
+  defaultRequestConfig: Axios.AxiosRequestConfig;
   state: TTaskState;
-  initializedStatus: WorkerStatus;
-  db: IDBPDatabase | undefined;
+  initializedStatus: Constants.WorkerStatus;
+  db: import('idb').IDBPDatabase | undefined;
 }
 
 type TTaskConfig = {
@@ -17,7 +21,7 @@ type TTaskConfig = {
 };
 
 type TTaskState = {
-  status: WorkerStatus;
+  status: Constants.WorkerStatus;
   total: number;
   finished: number;
   pending: number;
@@ -27,14 +31,21 @@ type TTaskState = {
 
 type TTaskResult<T = any> = {
   response: any;
-  status: TaskStatus;
+  status: Constants.TaskStatus;
   error?: any;
   task: T;
 };
 
 type TWorkerMessage = {
-  action: MessageActions;
+  action: Constants.MessageActions;
   data: any;
   state?: TTaskState | undefined;
   config?: TTaskConfig | undefined;
+};
+
+type WorkerPoolType = {
+  [key: string]: {
+    key: string;
+    processHelper?: import('../utils').ProcessHelper;
+  };
 };

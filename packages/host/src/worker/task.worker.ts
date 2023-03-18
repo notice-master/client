@@ -5,12 +5,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import * as R from 'ramda';
 import {
-  ITaskWorker,
-  TTaskConfig,
-  TTaskResult,
-  TTaskState,
-} from 'src/types/worker';
-import {
   MessageActions,
   WorkerStatus,
   TaskStatus,
@@ -64,10 +58,6 @@ class TaskWorker implements ITaskWorker {
           this.defaultRequestConfig
         );
         this.config = R.mergeDeepLeft(config, this.config);
-        console.log(
-          '🚀 ~ file: task.worker.ts:67 ~ TaskWorker ~ handleMessage ~ config:',
-          config
-        );
         this.state.total = Math.max(this.state.total, config.total);
         // first setup
         if (this.initializedStatus === WorkerStatus.uninitialized) {

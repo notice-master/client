@@ -6,7 +6,10 @@ import {
   PROCESS_STATUS_STORE_NAME,
 } from '../constants';
 
-export const getTaskDBInstance = (taskId: string, processCount?: number) => {
+export const getTaskDBInstance = (
+  taskId: string | number,
+  processCount?: number
+) => {
   return openDB(`${INDEXED_DB_PREFIX}${taskId}`, INDEXED_DB_VERSION, {
     upgrade(db, oldVersion, newVersion, transaction, event) {
       if (processCount) {

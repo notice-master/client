@@ -5,16 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import useBeforeUnload from 'use-before-unload';
 import { AxiosRequestConfig } from 'axios';
 import TaskWorker from '../../components/TaskWorker';
-import { TTaskConfig } from 'src/types/worker';
-import { getTaskDBInstance, ProcessHelper } from '../../utils';
+import { getTaskDBInstance, ProcessHelper, initTask } from '../../utils';
 import { INDEXED_STORE_PREFIX, TaskStatus } from 'src/constants';
-
-type WorkerPoolType = {
-  [key: string]: {
-    key: string;
-    processHelper?: ProcessHelper;
-  };
-};
 
 const TaskExecutor = () => {
   const dispatch = useAppDispatch();
@@ -63,14 +55,9 @@ const TaskExecutor = () => {
   const init = async () => {
     if (!state) {
       setState(true);
-      console.log('threadCounts: ', threadCounts);
-      const tasksObj: WorkerPoolType = {};
-      new Array(threadCounts).fill('').forEach((val, index) => {
-        const key = Math.random().toString(32).substring(3);
-        tasksObj[key] = { key };
-      });
-      setDB(await getTaskDBInstance(config.taskId, threadCounts));
-      setWorkerPool(tasksObj);
+      const { db, workerPool } = await initTask(config.taskId, threadCounts);
+      setDB(db);
+      setWorkerPool(workerPool);
     }
   };
   const reset = () => {
