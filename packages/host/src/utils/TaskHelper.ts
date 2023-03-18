@@ -1,5 +1,4 @@
 import { getTaskDBInstance } from './idb';
-import { WorkerPoolType } from '../types';
 import { IDBPDatabase } from 'idb';
 
 export const initTask = async (

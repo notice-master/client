@@ -1,7 +1,5 @@
-import { TTaskState } from 'src/types/worker';
 import { MessageActions, WorkerStatus } from '../constants';
 import { getMessage } from './WorkerHelper';
-import { IProcessInterface } from '../types';
 
 export class ProcessHelper implements IProcessInterface {
   public worker;

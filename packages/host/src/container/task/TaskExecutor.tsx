@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import useBeforeUnload from 'use-before-unload';
 import { AxiosRequestConfig } from 'axios';
 import TaskWorker from '../../components/TaskWorker';
-import { getTaskDBInstance, ProcessHelper, initTask } from '../../utils';
+import { ProcessHelper, initTask } from '../../utils';
 import { INDEXED_STORE_PREFIX, TaskStatus } from 'src/constants';
 
 const TaskExecutor = () => {
