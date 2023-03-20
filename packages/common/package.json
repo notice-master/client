@@ -30,7 +30,6 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.9.0",
     "redux": "^4.2.1",
-    "redux-injectors": "^2.1.0",
     "redux-saga": "^1.2.3"
   }
 }
