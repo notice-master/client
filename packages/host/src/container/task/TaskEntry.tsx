@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import TaskExecutor from './task/TaskExecutor';
+import TaskExecutor from './TaskExecutor';
 
 const Entry = () => {
   return (

@@ -2,6 +2,7 @@
     "zh-CN": {
         "home": "首页",
         "template-message": "模板消息",
+        "material": "素材",
         "overview": "概览",
         "list": "列表",
         "task": "推送任务"
@@ -9,6 +10,7 @@
     "en-US": {
         "home": "Home",
         "template-message": "Template message",
+        "material": "material",
         "test": "test",
         "list": "list",
         "task": "Task"

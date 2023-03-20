@@ -1,11 +1,11 @@
 export const menuData: MenuItem[] = [
   { key: 'home', title: '首页', children: [], icon: 'HomeOutlined' },
   {
-    key: 'template-message',
+    key: 'material',
     title: '素材管理',
     icon: 'CommentOutlined',
     children: [
-      { key: 'template-message/overview', title: '概览', children: [] },
+      { key: 'material/overview', title: '概览', children: [] },
       { key: 'template-message/list', title: '素材列表', children: [] },
       { key: 'template-message/edit', title: '编辑素材', children: [] },
       // {
@@ -36,4 +36,3 @@ export const menuData: MenuItem[] = [
   { key: 'settings', title: '设置', children: [], icon: 'SettingOutlined' },
 ];
 export { default as routes } from './routes';
-

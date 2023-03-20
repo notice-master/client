@@ -1,4 +1,4 @@
-import { HomePage, TaskEntry } from '../container';
+import { HomePage, TaskEntry, MaterialEntry } from '../container';
 interface RouteInterface {
   path: string;
   component: JSX.Element;
@@ -17,13 +17,17 @@ const routes: RouteInterface[] = [
     path: '/home',
     component: <HomePage />,
   },
+  {
+    path: '/task/*',
+    component: <TaskEntry />,
+  },
   // {
   //   path: '/template-message/*',
   //   component: <TemplateMessageEntry />,
   // },
   {
-    path: '/task/*',
-    component: <TaskEntry />,
+    path: '/material/*',
+    component: <MaterialEntry />,
   },
   // {
   //   path: 'settings',

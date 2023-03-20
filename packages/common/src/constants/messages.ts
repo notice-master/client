@@ -14,6 +14,11 @@ export const globalMessages: messageMap = defineMessages({
     description: 'Message to template-message of the Navigator.',
     defaultMessage: '模板消息',
   },
+  material: {
+    id: `${scope}.material`,
+    description: 'Message to overview of the Navigator.',
+    defaultMessage: '素材',
+  },
   overview: {
     id: `${scope}.overview`,
     description: 'Message to overview of the Navigator.',
