@@ -9,7 +9,7 @@ import NotFoundPage from './NotFoundPage';
 interface MainRoutersProps {
   wrapper?: React.FunctionComponent;
 }
-const DefaultWrapper = ({ children }: {children: React.ReactNode}) => (
+const DefaultWrapper = ({ children }: { children: React.ReactNode }) => (
   <Layout.Content style={{ margin: '0 16px' }}>{children}</Layout.Content>
 );
 
@@ -18,14 +18,14 @@ const MainRouters = ({ wrapper }: MainRoutersProps) => {
   const dispatch = useAppDispatch();
   let location = useLocation();
   useEffect(() => {
-    return () =>{
+    return () => {
       dispatch(
         setCurrentPageInfo({
           title: '',
           subtitle: '',
         })
       );
-    }
+    };
   }, [location]);
   const { ErrorBoundary } = Alert;
   return (
