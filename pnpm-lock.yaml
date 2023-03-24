@@ -31,6 +31,7 @@ importers:
       react-redux: ^8.0.5
       react-router-dom: ^6.9.0
       redux: ^4.2.1
+      redux-injectors: ^2.1.0
       redux-saga: ^1.2.3
     dependencies:
       '@apollo/client': 3.7.10_gdcq4dv6opitr3wbfwyjmanyra
@@ -43,6 +44,7 @@ importers:
       react-redux: 8.0.5_ctrls2ti7t7iutxbwkm5ipogyy
       react-router-dom: 6.9.0_biqbaboplfbrettd7655fr4n2y
       redux: 4.2.1
+      redux-injectors: 2.1.0_s46bjdpufeht5dtg6mixek7pqq
       redux-saga: 1.2.3
     devDependencies:
       '@efox/emp': 2.6.4_gkro4eqgpjmil6weamne5ksf7u
@@ -57,6 +59,7 @@ importers:
       '@ant-design/pro-components': ^2.4.2
       '@efox/emp': ^2.6.4
       '@nmc/common': workspace:*
+      '@reduxjs/toolkit': ^1.9.3
       '@types/ramda': ^0.28.23
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.11
@@ -77,6 +80,7 @@ importers:
       '@ant-design/icons': 4.8.0_biqbaboplfbrettd7655fr4n2y
       '@ant-design/pro-components': 2.4.2_iq4on5bbqusrb2n2t5k3em3t4i
       '@nmc/common': link:../common
+      '@reduxjs/toolkit': 1.9.3_react@18.2.0
       '@types/ramda': 0.28.23
       antd: 5.3.1_biqbaboplfbrettd7655fr4n2y
       axios: 0.21.4
@@ -3687,6 +3691,24 @@ packages:
       immer: 9.0.19
       react: 18.2.0
       react-redux: 8.0.5_ctrls2ti7t7iutxbwkm5ipogyy
+      redux: 4.2.1
+      redux-thunk: 2.4.2_redux@4.2.1
+      reselect: 4.1.7
+    dev: false
+
+  /@reduxjs/toolkit/1.9.3_react@18.2.0:
+    resolution: {integrity: sha512-GU2TNBQVofL09VGmuSioNPQIu6Ml0YLf4EJhgj0AvBadRlCGzUWet8372LjvO4fqKZF2vH1xU0htAa7BrK9pZg==}
+    peerDependencies:
+      react: ^16.9.0 || ^17.0.0 || ^18
+      react-redux: ^7.2.1 || ^8.0.2
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-redux:
+        optional: true
+    dependencies:
+      immer: 9.0.19
+      react: 18.2.0
       redux: 4.2.1
       redux-thunk: 2.4.2_redux@4.2.1
       reselect: 4.1.7
@@ -9025,6 +9047,22 @@ packages:
     dependencies:
       minimatch: 3.1.2
     dev: true
+
+  /redux-injectors/2.1.0_s46bjdpufeht5dtg6mixek7pqq:
+    resolution: {integrity: sha512-LwGYiUfeoNoPwmTNnjwuxfAxeeNkqQBm3rz/XMDW7DUKdUvSy+A/RBAYMcSFlgv1qX6sXQX9R+YrwHAkyJmyYg==}
+    peerDependencies:
+      react: ^16.6.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
+      react-redux: ^7.1.0
+    dependencies:
+      hoist-non-react-statics: 3.3.2
+      invariant: 2.2.4
+      lodash: 4.17.21
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-redux: 8.0.5_ctrls2ti7t7iutxbwkm5ipogyy
+      redux: 4.2.1
+    dev: false
 
   /redux-saga/1.2.3:
     resolution: {integrity: sha512-HDe0wTR5nhd8Xr5xjGzoyTbdAw6rjy1GDplFt3JKtKN8/MnkQSRqK/n6aQQhpw5NI4ekDVOaW+w4sdxPBaCoTQ==}
