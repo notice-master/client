@@ -1,8 +1,25 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Button, Result } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const NotFoundPage = () => {
-  const params = useParams();
-  return <div>页面未找到</div>;
+  const navigate = useNavigate();
+  return (
+    <Result
+      status="404"
+      title="404"
+      subTitle="对不起，未找到您访问的页面"
+      extra={
+        <Button
+          type="primary"
+          onClick={() => {
+            navigate('/');
+          }}
+        >
+          返回首页
+        </Button>
+      }
+    />
+  );
 };
 export default NotFoundPage;
