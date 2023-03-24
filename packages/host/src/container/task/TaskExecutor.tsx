@@ -1,4 +1,4 @@
-import { setCurrentPageInfo, useAppDispatch } from '@nmc/common';
+import { useAppDispatch } from '@nmc/common';
 import { IDBPDatabase, openDB } from 'idb';
 import { Button, Col, Input, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
@@ -95,14 +95,7 @@ const TaskExecutor = () => {
       processHelper.pause();
     });
   };
-  useEffect(() => {
-    dispatch(
-      setCurrentPageInfo({
-        title: '任务执行器',
-        subtitle: '',
-      })
-    );
-  }, []);
+  useEffect(() => {}, []);
 
   const isAllWorkerReady = useMemo(() => {
     const values = Object.values(workerPool);

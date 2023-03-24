@@ -28,6 +28,7 @@ export const menuData: MenuItem[] = [
     title: '任务管理',
     icon: 'BarsOutlined',
     children: [
+      { key: 'task/overview', title: '任务概览', children: [] },
       { key: 'task/executor', title: '任务执行器', children: [] },
       { key: 'task/edit', title: '实时任务', children: [] },
       { key: 'task/task', title: '定时任务', children: [] },

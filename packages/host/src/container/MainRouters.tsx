@@ -1,5 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons';
-import { setCurrentPageInfo, useAppDispatch } from '@nmc/common';
+import { useAppDispatch } from '@nmc/common';
 import { Alert, Col, Layout, Row } from 'antd';
 import React, { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
@@ -18,14 +18,7 @@ const MainRouters = ({ wrapper }: MainRoutersProps) => {
   const dispatch = useAppDispatch();
   let location = useLocation();
   useEffect(() => {
-    return () => {
-      dispatch(
-        setCurrentPageInfo({
-          title: '',
-          subtitle: '',
-        })
-      );
-    };
+    return () => {};
   }, [location]);
   const { ErrorBoundary } = Alert;
   return (

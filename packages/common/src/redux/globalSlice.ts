@@ -16,16 +16,16 @@ export const globalSlice = createSlice({
   name: 'global',
   initialState,
   reducers: {
-    setCurrentPageInfo: (state, action: PayloadAction<CurrentPageInfo>) => {
-      state.currentPageInfo = {
-        ...state.currentPageInfo,
-        ...action.payload,
-      };
+    setGlobalState: (state, action: PayloadAction<GlobalState>) => {
+      for (const _key in action.payload) {
+        const key = _key as keyof GlobalState;
+        state[key] = action.payload[key];
+      }
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setCurrentPageInfo } = globalSlice.actions;
+export const { setGlobalState } = globalSlice.actions;
 
 export default globalSlice.reducer;
