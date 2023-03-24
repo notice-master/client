@@ -7,18 +7,17 @@ const BreadcrumbContent = () => {
   const { intl } = useNLS();
 
   return (
-    <Breadcrumb style={{ margin: '16px 0' }}>
-      {pathname
+    <Breadcrumb
+      style={{ margin: '16px 0' }}
+      items={pathname
         .split('/')
         .filter((item) => item)
-        .map((item: string) => (
-          <Breadcrumb.Item key={item}>
-            {globalMessages[item]
-              ? intl.formatMessage(globalMessages[item])
-              : item}
-          </Breadcrumb.Item>
-        ))}
-    </Breadcrumb>
+        .map((item: string) => ({
+          title: globalMessages[item]
+            ? intl.formatMessage(globalMessages[item])
+            : item,
+        }))}
+    ></Breadcrumb>
   );
 };
 
