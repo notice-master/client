@@ -1,8 +1,9 @@
 import { LoadingOutlined } from '@ant-design/icons';
 import { Alert, Col, Layout, Row } from 'antd';
 import React from 'react';
-import { CommonHeader } from '../components';
+import { Outlet } from 'react-router-dom';
 import MainRouters from './MainRouters';
+import { BreadcrumbContent } from '../components';
 
 const { ErrorBoundary } = Alert;
 
@@ -10,14 +11,6 @@ interface Props {
   children?: React.ReactNode;
   // any props that come into the component
 }
-
-const ContentWrapper = ({ children }: Props) => {
-  return (
-    <>
-      <Layout.Content style={{ margin: '0 16px' }}>{children}</Layout.Content>
-    </>
-  );
-};
 
 const MainContent = () => {
   return (
@@ -31,7 +24,10 @@ const MainContent = () => {
           </Row>
         }
       >
-        <MainRouters wrapper={ContentWrapper} />
+        <Layout.Content style={{ margin: '0 16px' }}>
+          <BreadcrumbContent />
+          <Outlet />
+        </Layout.Content>
       </React.Suspense>
     </ErrorBoundary>
   );

@@ -1,37 +1,43 @@
-import { HomePage, TaskEntry, MaterialEntry } from '../container';
-interface RouteInterface {
-  path: string;
-  component: JSX.Element;
-  title?: string;
-  subTitle?: string;
-}
-// const TemplateMessageEntry = React.lazy(
-//   () => import('@nmc/template-message/entry')
-// );
-// const TaskEntry = React.lazy(() => import('@nmc/common/containers/TaskEntry'));
-// const Settings = React.lazy(() => import('@nmc/common/containers/Settings'));
-// const Home = React.lazy(() => import('@nmc/common/containers/Home'));
+import { Navigate } from 'react-router-dom';
+import type { RouteObject } from 'react-router-dom';
+import {
+  Framework,
+  HomePage,
+  TaskEntry,
+  MaterialEntry,
+  NotFoundPage,
+} from '../container';
 
-const routes: RouteInterface[] = [
+const routes: RouteObject[] = [
   {
-    path: '/home',
-    component: <HomePage />,
+    Component: Framework,
+    ErrorBoundary: NotFoundPage,
+    children: [
+      {
+        path: 'home',
+        Component: HomePage,
+      },
+      {
+        path: 'task/*',
+        Component: TaskEntry,
+      },
+      // {
+      //   path: '/template-message/*',
+      //   Component: TemplateMessageEntry,
+      // },
+      {
+        path: 'material/*',
+        Component: MaterialEntry,
+      },
+      // {
+      //   path: 'settings',
+      //   Component: Settings,
+      // },
+      {
+        path: '/',
+        element: <Navigate replace to="home" />,
+      },
+    ],
   },
-  {
-    path: '/task/*',
-    component: <TaskEntry />,
-  },
-  // {
-  //   path: '/template-message/*',
-  //   component: <TemplateMessageEntry />,
-  // },
-  {
-    path: '/material/*',
-    component: <MaterialEntry />,
-  },
-  // {
-  //   path: 'settings',
-  //   component: <Settings />,
-  // },
 ];
 export default routes;

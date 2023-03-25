@@ -16,7 +16,7 @@ const Framework = () => {
         <Layout className="site-layout">
           <MainContent />
           <Footer style={{ textAlign: 'center' }}>
-            Notice Master ©2022 Created by{' '}
+            Notice Master ©2023 Created by{' '}
             <a target="_blank" href="https://www.zjl.me" rel="noreferrer">
               ZJL.ME
             </a>

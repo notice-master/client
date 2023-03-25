@@ -1,14 +1,22 @@
 import { CommonProviders } from '@nmc/common';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  createRoutesFromElements,
+  Navigate,
+  Route,
+} from 'react-router-dom';
 // import axios from 'axios';
-import Framework from './container/Framework';
+import { routes } from './routes';
 import './styled/global.css';
 export interface CustomMessage {
   [key: string]: string;
 }
 const App = () => {
+  const router = createBrowserRouter(routes);
   return (
     <CommonProviders>
-      <Framework />
+      <RouterProvider router={router}></RouterProvider>
     </CommonProviders>
   );
 };
