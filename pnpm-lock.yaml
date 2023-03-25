@@ -72,6 +72,7 @@ importers:
       browserslist: ^4.21.5
       eslint: ^8.36.0
       idb: ^7.1.1
+      nanoid: ^4.0.1
       ramda: ^0.28.0
       rc-field-form: ^1.29.1
       react: ^18.2.0
@@ -87,6 +88,7 @@ importers:
       antd: 5.3.1_biqbaboplfbrettd7655fr4n2y
       axios: 0.21.4
       idb: 7.1.1
+      nanoid: 4.0.1
       ramda: 0.28.0
       rc-field-form: 1.29.1_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
@@ -7114,6 +7116,12 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
     dev: true
+
+  /nanoid/4.0.1:
+    resolution: {integrity: sha512-udKGtCCUafD3nQtJg9wBhRP3KMbPglUsgV5JVsXhvyBs/oefqb4sqMEhKBBgqZncYowu58p1prsZQBYvAj/Gww==}
+    engines: {node: ^14 || ^16 || >=18}
+    hasBin: true
+    dev: false
 
   /nanospinner/0.6.0:
     resolution: {integrity: sha512-G2QQwVJListXbtsBW5r5kJs8WXybsO9/SQxzcvSmPRSIOQOeR0v/ETI9hncOna0tzWscdjjcCZUVCJoR4eJlag==}

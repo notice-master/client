@@ -4,19 +4,21 @@ import { Button, Col, Input, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import useBeforeUnload from 'use-before-unload';
 import { AxiosRequestConfig } from 'axios';
+import { useParams } from 'react-router-dom';
 import TaskWorker from '../../components/TaskWorker';
 import { ProcessHelper, initTask } from '../../utils';
-import { INDEXED_STORE_PREFIX, TaskStatus } from 'src/constants';
+import { PROCESS_STORE_PREFIX, TaskStatus } from 'src/constants';
 
 const TaskExecutor = () => {
   const dispatch = useAppDispatch();
+  const params = useParams();
   const [threadCounts, setThreadCounts] = useState(10);
   const [db, setDB] = useState<IDBPDatabase>();
   const [config, setConfig] = useState({
     delay: 500,
     total: 83,
     finished: 0,
-    taskId: '1',
+    taskId: params.taskId || '',
   });
   const [defaultRequestConfig, setDefaultRequestConfig] =
     useState<AxiosRequestConfig>({
@@ -53,7 +55,7 @@ const TaskExecutor = () => {
     }
   });
   const init = async () => {
-    if (!state) {
+    if (!state && config.taskId) {
       setState(true);
       const { db, workerPool } = await initTask(config.taskId, threadCounts);
       setDB(db);
@@ -66,7 +68,7 @@ const TaskExecutor = () => {
   const testPush = () => {
     Object.values(workerPool).forEach(async ({ processHelper }, index) => {
       if (!processHelper || !db) return;
-      const storeName = `${INDEXED_STORE_PREFIX}${index + 1}`;
+      const storeName = `${PROCESS_STORE_PREFIX}${index + 1}`;
       const tx = db.transaction(storeName, 'readwrite');
       const tasks = new Array(10).fill('').map(() => {
         const openid = Math.random().toString(32).substring(3);
@@ -151,6 +153,7 @@ const TaskExecutor = () => {
       </div>
       <div>
         {state &&
+          config.taskId &&
           Object.keys(workerPool).map((key: string, index: number) => {
             const workerObj = workerPool[key];
             return (

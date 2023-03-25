@@ -8,7 +8,7 @@ import {
   MessageActions,
   WorkerStatus,
   TaskStatus,
-  INDEXED_STORE_PREFIX,
+  PROCESS_STORE_PREFIX,
   PROCESS_STATUS_STORE_NAME,
 } from '../constants';
 import { IDBPDatabase } from 'idb';
@@ -40,7 +40,7 @@ class TaskWorker implements ITaskWorker {
     this.db = undefined;
   }
   get storeName() {
-    return `${INDEXED_STORE_PREFIX}${this.config.processId}`;
+    return `${PROCESS_STORE_PREFIX}${this.config.processId}`;
   }
   handleMessage(event: Event & { data?: any }) {
     const { data: messageData } = event;
