@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Modal, Input } from 'antd';
 import { IDBPDatabase } from 'idb';
 import { nanoid } from 'nanoid';
-import { useNavigate } from 'react-router-dom';
+import { useSubmit } from 'react-router-dom';
 import createTaskModalReducer, {
   setModalStatus,
   ICreateTaskModalConfig,
@@ -15,7 +15,7 @@ import { TASK_MANAGE_DB_NAME } from '../../constants';
 export default () => {
   useInjectReducer({ key: 'createTaskModal', reducer: createTaskModalReducer });
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const submit = useSubmit();
   const modalStatus = useSelector<
     { createTaskModal: ICreateTaskModalConfig },
     IModalStatus
@@ -36,7 +36,10 @@ export default () => {
           open: false,
         })
       );
-      navigate(`/task/executor/${taskID}/`);
+      const formData = new FormData();
+      formData.append('taskId', taskID);
+      formData.append('threadCounts', form.getFieldValue('threadCounts'));
+      submit(formData, { action: '/task/executor', method: 'post' });
     }
   };
   const handleCancel = () => {
@@ -49,6 +52,7 @@ export default () => {
   const initDB = async () => {
     setTaskManageDB(await getTaskManageDBInstance());
   };
+
   useEffect(() => {
     initDB();
   }, []);
@@ -61,12 +65,11 @@ export default () => {
       confirmLoading={confirmLoading}
     >
       <Form
-        action="/task/executor"
-        method="post"
         form={form}
         layout="horizontal"
         name="form_in_modal"
         initialValues={{ threadCounts: 10 }}
+        component={false}
       >
         <Form.Item
           name="threadCounts"

@@ -5,6 +5,7 @@ import { Layout, Menu } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { menuData } from '../routes';
+import type { MenuItem } from '../routes';
 
 type TIconNames = keyof typeof allIcons;
 
@@ -39,33 +40,53 @@ const LeftMenu = () => {
     if (!key || !(key in allIcons)) {
       return <></>;
     }
-    const Component = allIcons[key as T] as any;
+    const Component = allIcons[key as T] as any; // TODO: Investigate how to avoid using any
     return <Component />;
   };
   const renderMenuList = (
     data: MenuItem[],
     sourceMapping: Map<string, MenuItem> | undefined
   ): MenuProps['items'] => {
-    return data.map((item: MenuItem) => {
-      const { key, title, children = [], icon } = item;
-      if (sourceMapping) {
-        setMenuMapping(sourceMapping.set(key, item));
-      }
-      if (item?.children?.length) {
-        return {
-          label: title,
-          key: key,
-          icon: getIcon(icon),
-          children: renderMenuList(children, sourceMapping),
-        };
-      } else {
-        return {
-          label: <Link to={getPathByKey(key)}>{title}</Link>,
-          key: key,
-          icon: getIcon(icon),
-        };
-      }
-    });
+    return data
+      .map((item: MenuItem) => {
+        const {
+          key,
+          title,
+          children = [],
+          icon,
+          hiddenDefault = false,
+          disabled = false,
+        } = item;
+        if (sourceMapping) {
+          setMenuMapping(sourceMapping.set(key, item));
+        }
+        if (item?.children?.length) {
+          return {
+            label: title,
+            key: key,
+            icon: getIcon(icon),
+            children: renderMenuList(children, sourceMapping),
+            disabled,
+            hiddenDefault,
+          };
+        } else {
+          return {
+            label: selectedMenuKeys.includes(key) ? (
+              title
+            ) : (
+              <Link to={getPathByKey(key)}>{title}</Link>
+            ),
+            key: key,
+            icon: getIcon(icon),
+            disabled,
+            hiddenDefault,
+          };
+        }
+      })
+      .filter(
+        ({ hiddenDefault, key }) =>
+          !hiddenDefault || selectedMenuKeys.includes(key)
+      );
   };
 
   const getDefaultActiveItems = (
@@ -102,7 +123,7 @@ const LeftMenu = () => {
 
   const menuItems = useMemo(() => {
     return renderMenuList(menuData, menuMapping);
-  }, [menuData]);
+  }, [menuData, selectedMenuKeys]);
 
   const menu = useMemo(() => {
     localStorage.setItem(LEFT_MENU_CACHED_OPEND, JSON.stringify(openMenuKeys));

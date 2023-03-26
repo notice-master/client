@@ -7,11 +7,9 @@ const Entry = () => {
   return (
     <Routes>
       <Route path={`overview`} element={<TaskOverview />}></Route>
-      <Route path={`executor`}>
-        <Route path={`:taskId`} element={<TaskExecutor />}></Route>
-      </Route>
-      <Route path="*" element={<Navigate to="overview" />} />
+      {/* <Route path="*" element={<Navigate to="./overview" />} /> */}
     </Routes>
   );
 };
+
 export default Entry;

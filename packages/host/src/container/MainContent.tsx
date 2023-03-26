@@ -2,7 +2,6 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Alert, Col, Layout, Row } from 'antd';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import MainRouters from './MainRouters';
 import { BreadcrumbContent } from '../components';
 
 const { ErrorBoundary } = Alert;

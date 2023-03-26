@@ -1,10 +1,10 @@
 import { useAppDispatch } from '@nmc/common';
-import { IDBPDatabase, openDB } from 'idb';
+import type { IDBPDatabase } from 'idb';
 import { Button, Col, Input, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import useBeforeUnload from 'use-before-unload';
 import { AxiosRequestConfig } from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useActionData } from 'react-router-dom';
 import TaskWorker from '../../components/TaskWorker';
 import { ProcessHelper, initTask } from '../../utils';
 import { PROCESS_STORE_PREFIX, TaskStatus } from 'src/constants';
@@ -12,6 +12,11 @@ import { PROCESS_STORE_PREFIX, TaskStatus } from 'src/constants';
 const TaskExecutor = () => {
   const dispatch = useAppDispatch();
   const params = useParams();
+  const actionData = useActionData();
+  console.log(
+    '🚀 ~ file: TaskExecutor.tsx:16 ~ TaskExecutor ~ actionData:',
+    actionData
+  );
   const [threadCounts, setThreadCounts] = useState(10);
   const [db, setDB] = useState<IDBPDatabase>();
   const [config, setConfig] = useState({

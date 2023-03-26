@@ -1,3 +1,12 @@
+export type MenuItem = {
+  key: string;
+  title: string;
+  icon?: string;
+  children?: MenuItem[];
+  hiddenDefault?: boolean;
+  disabled?: boolean;
+};
+
 export const menuData: MenuItem[] = [
   { key: 'home', title: '首页', children: [], icon: 'HomeOutlined' },
   {
@@ -29,7 +38,12 @@ export const menuData: MenuItem[] = [
     icon: 'BarsOutlined',
     children: [
       { key: 'task/overview', title: '任务概览', children: [] },
-      { key: 'task/executor', title: '任务执行器', children: [] },
+      {
+        key: 'task/executor',
+        title: '任务执行器',
+        children: [],
+        hiddenDefault: true,
+      },
       { key: 'task/edit', title: '实时任务', children: [] },
       { key: 'task/task', title: '定时任务', children: [] },
     ],
