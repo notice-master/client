@@ -48,18 +48,16 @@ const LeftMenu = () => {
     sourceMapping: Map<string, MenuItem> | undefined
   ): MenuProps['items'] => {
     return data
-      .map((item: MenuItem) => {
-        const {
-          key,
-          title,
-          children = [],
-          icon,
-          hiddenDefault = false,
-          disabled = false,
-        } = item;
+      .filter((item: MenuItem) => {
+        const { hiddenDefault, key } = item;
         if (sourceMapping) {
           setMenuMapping(sourceMapping.set(key, item));
         }
+        return !hiddenDefault || selectedMenuKeys.includes(key);
+      })
+      .map((item: MenuItem) => {
+        const { key, title, children = [], icon, disabled = false } = item;
+
         if (item?.children?.length) {
           return {
             label: title,
@@ -67,7 +65,6 @@ const LeftMenu = () => {
             icon: getIcon(icon),
             children: renderMenuList(children, sourceMapping),
             disabled,
-            hiddenDefault,
           };
         } else {
           return {
@@ -79,14 +76,9 @@ const LeftMenu = () => {
             key: key,
             icon: getIcon(icon),
             disabled,
-            hiddenDefault,
           };
         }
-      })
-      .filter(
-        ({ hiddenDefault, key }) =>
-          !hiddenDefault || selectedMenuKeys.includes(key)
-      );
+      });
   };
 
   const getDefaultActiveItems = (
