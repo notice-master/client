@@ -60,23 +60,37 @@ const TaskList = () => {
     },
   ];
 
+  const getDataByPage = async (pageNum: number, pageSize: number) => {
+    const result = [];
+    if (taskManageDB) {
+      const tx = taskManageDB.transaction('tasks', 'readonly');
+      let cursor = await tx.store.index('updateTime').openCursor(null, 'prev');
+      let count = 1;
+      while (cursor && result.length < pageSize) {
+        if (count > (pageNum - 1) * pageSize && count <= pageNum * pageSize) {
+          result.push({ ...cursor.value, key: cursor.value.id });
+        }
+        if (result.length >= pageSize) break;
+        count++;
+        cursor = await cursor.continue();
+      }
+    }
+    return result;
+  };
+
   useEffect(() => {
     initDB();
   }, []);
   useEffect(() => {
     if (taskManageDB) {
       const tx = taskManageDB.transaction('tasks', 'readonly');
+      const { current = 1, pageSize = 10 } = pagination;
       tx.store.count().then((total) => {
         setPagination({ ...pagination, total });
       });
-      const { current = 1, pageSize = 10 } = pagination;
-      tx.store
-        .getAll(
-          IDBKeyRange.bound((current - 1) * pageSize, current * pageSize, true)
-        )
-        .then((data) => {
-          setTasks(data);
-        });
+      getDataByPage(current, pageSize).then((data) => {
+        setTasks(data);
+      });
     }
   }, [taskManageDB, pagination.current, pagination.pageSize]);
 

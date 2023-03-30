@@ -60,7 +60,7 @@ export default () => {
         dataType: 'template-message',
         taskType: 'local',
         createTime: new Date(),
-        updateTIme: new Date(),
+        updateTime: new Date(),
       } as ITaskRecord);
       dispatch(
         setModalStatus({
