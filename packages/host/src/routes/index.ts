@@ -38,14 +38,13 @@ export const menuData: MenuItem[] = [
     icon: 'BarsOutlined',
     children: [
       { key: 'task/overview', title: '任务概览', children: [] },
+      { key: 'task/list', title: '任务列表', children: [] },
       {
         key: 'task/executor',
         title: '任务执行器',
         children: [],
         hiddenDefault: true,
       },
-      { key: 'task/edit', title: '实时任务', children: [] },
-      { key: 'task/task', title: '定时任务', children: [] },
     ],
   },
   { key: 'settings', title: '设置', children: [], icon: 'SettingOutlined' },

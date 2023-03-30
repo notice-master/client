@@ -20,6 +20,8 @@ export const getTaskManageDBInstance = () => {
           autoIncrement: true,
         });
         store.createIndex('id', 'id');
+        store.createIndex('createTime', 'createTime');
+        store.createIndex('updateTime', 'updateTime');
       },
       blocked(currentVersion, blockedVersion, event) {},
       blocking(currentVersion, blockedVersion, event) {},

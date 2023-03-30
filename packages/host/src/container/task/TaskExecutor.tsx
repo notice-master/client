@@ -4,52 +4,22 @@ import { Button, Col, Input, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import useBeforeUnload from 'use-before-unload';
 import { AxiosRequestConfig } from 'axios';
-import { useParams, useActionData } from 'react-router-dom';
+import { useActionData, Navigate } from 'react-router-dom';
 import TaskWorker from '../../components/TaskWorker';
-import { ProcessHelper, initTask } from '../../utils';
+import { ProcessHelper, initTask, getTaskManageDBInstance } from '../../utils';
 import { PROCESS_STORE_PREFIX, TaskStatus } from 'src/constants';
 
 const TaskExecutor = () => {
-  const dispatch = useAppDispatch();
-  const params = useParams();
-  const actionData = useActionData();
-  console.log(
-    '🚀 ~ file: TaskExecutor.tsx:16 ~ TaskExecutor ~ actionData:',
-    actionData
-  );
-  const [threadCounts, setThreadCounts] = useState(10);
+  const [taskManageDB, setTaskManageDB] = useState<IDBPDatabase>();
+  const actionData = useActionData() as TCreateTaskFormData;
+  if (!actionData) {
+    return <Navigate replace to="../task/overview" />;
+  }
+  const { taskId, threadCounts } = actionData;
   const [db, setDB] = useState<IDBPDatabase>();
-  const [config, setConfig] = useState({
-    delay: 500,
-    total: 83,
-    finished: 0,
-    taskId: params.taskId || '',
-  });
+  const [taskConfig, setTaskConfig] = useState<TTaskConfig>();
   const [defaultRequestConfig, setDefaultRequestConfig] =
-    useState<AxiosRequestConfig>({
-      url: 'https://w.1717shua.cn/addons/zjl_mass_tpl_msg/apiAgent.php',
-      // url: 'https://agent.1717shua.cn/cgi-bin/template/api_add_template',
-      params: {
-        api: 'message/template/send',
-        access_token: 'test_token',
-      },
-      data: {
-        touser: 'ot7Ngwyd0fEwZqq_DCZ6Yt9xQ6Qc',
-        template_id: 'f1DPMaEr-Q8WRYxmgxG67YCD8zoOOuyJCpel1OJEax0',
-        url: '',
-        miniprogram: { appid: '', pagepath: '' },
-        data: {
-          first: { value: '', color: '#000000' },
-          keyword1: { value: '', color: '#000000' },
-          keyword2: { value: '', color: '#000000' },
-          remark: { value: '', color: '#000000' },
-        },
-      },
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+    useState<AxiosRequestConfig>();
   const [state, setState] = useState(false);
   const [workerPool, setWorkerPool] = useState<WorkerPoolType>({});
   useBeforeUnload((event) => {
@@ -60,9 +30,12 @@ const TaskExecutor = () => {
     }
   });
   const init = async () => {
-    if (!state && config.taskId) {
+    if (!state && taskConfig?.taskId) {
       setState(true);
-      const { db, workerPool } = await initTask(config.taskId, threadCounts);
+      const { db, workerPool } = await initTask(
+        taskConfig.taskId,
+        threadCounts
+      );
       setDB(db);
       setWorkerPool(workerPool);
     }
@@ -102,7 +75,25 @@ const TaskExecutor = () => {
       processHelper.pause();
     });
   };
-  useEffect(() => {}, []);
+  const initDB = async () => {
+    setTaskManageDB(await getTaskManageDBInstance());
+  };
+  useEffect(() => {
+    initDB();
+  }, []);
+  useEffect(() => {
+    if (taskManageDB) {
+      taskManageDB
+        .transaction('tasks', 'readonly')
+        .store.index('id')
+        .get(taskId)
+        .then((data) => {
+          const { taskConfig, defaultRequestConfig } = data;
+          setTaskConfig(taskConfig);
+          setDefaultRequestConfig(defaultRequestConfig);
+        });
+    }
+  }, [taskManageDB]);
 
   const isAllWorkerReady = useMemo(() => {
     const values = Object.values(workerPool);
@@ -119,18 +110,6 @@ const TaskExecutor = () => {
       tip={'正在创建任务....'}
     >
       <Row gutter={5} align="middle">
-        <Col>进程数:</Col>
-        <Col>
-          <Input
-            type="text"
-            value={threadCounts}
-            onChange={({ target }) => {
-              const { value = 0 } = target;
-              setThreadCounts(Number(value) || 0);
-            }}
-            style={{ width: 60 }}
-          />
-        </Col>
         <Col>
           <Button type="primary" onClick={init} disabled={state}>
             初始化
@@ -158,7 +137,8 @@ const TaskExecutor = () => {
       </div>
       <div>
         {state &&
-          config.taskId &&
+          taskConfig?.taskId &&
+          defaultRequestConfig &&
           Object.keys(workerPool).map((key: string, index: number) => {
             const workerObj = workerPool[key];
             return (
@@ -167,7 +147,7 @@ const TaskExecutor = () => {
                 key={workerObj.key}
                 index={index + 1}
                 config={{
-                  ...config,
+                  ...taskConfig,
                   processId: (index + 1).toString(),
                 }}
                 defaultRequestConfig={defaultRequestConfig}

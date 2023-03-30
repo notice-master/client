@@ -17,8 +17,19 @@ interface ITaskWorker {
 type TTaskConfig = {
   delay: number;
   taskId: string;
-  processId: string;
+  processId?: string;
 };
+
+interface ITaskRecord {
+  id: string;
+  threadCounts: number;
+  taskConfig: TTaskConfig;
+  defaultRequestConfig: Axios.AxiosRequestConfig;
+  dataType: string;
+  taskType: string;
+  createTime: Date;
+  updateTIme: Date;
+}
 
 type TTaskState = {
   status: Constants.WorkerStatus;
@@ -48,4 +59,10 @@ type WorkerPoolType = {
     key: string;
     processHelper?: import('../utils').ProcessHelper;
   };
+};
+
+type TCreateTaskFormData = {
+  taskId: string;
+  threadCounts: number;
+  autoInit?: boolean;
 };

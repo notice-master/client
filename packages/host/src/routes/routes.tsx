@@ -24,10 +24,10 @@ const routes: RouteObject[] = [
         action: async ({ request, params }) => {
           switch (request.method) {
             case 'POST': {
-              let formData = await request.formData();
-              let name = formData.get('projectName');
+              const formData = await request.formData();
               return {
-                projectName: 'test2',
+                taskId: formData.get('taskId'),
+                threadCounts: Number(formData.get('threadCounts')) || 10,
               };
             }
             default: {
