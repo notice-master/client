@@ -11,6 +11,7 @@ module.exports = defineConfig(({ mode }) => {
     build: {
       target,
       staticDir: "static",
+      sourcemap: true,
     },
     server: {
       port: 8001,

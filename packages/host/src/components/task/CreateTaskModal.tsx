@@ -2,23 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Form, Modal, Input } from 'antd';
 import { IDBPDatabase } from 'idb';
 import { nanoid } from 'nanoid';
-import { useSubmit } from 'react-router-dom';
 import createTaskModalReducer, {
-  setModalStatus,
-  ICreateTaskModalConfig,
-  IModalStatus,
-} from '../../redux/createTaskModalSlice';
+  setModalConfig,
+  ITaskModalStore,
+  IModalConfig,
+} from '../../redux/taskModalSlice';
 import { useInjectReducer, useSelector, useAppDispatch } from '@nmc/common';
 import { getTaskManageDBInstance, initTask } from '../../utils';
-
-export default () => {
-  useInjectReducer({ key: 'createTaskModal', reducer: createTaskModalReducer });
+interface ITaskModalProps {
+  onConfirm: (taskId: string) => void;
+}
+export default ({ onConfirm }: ITaskModalProps) => {
+  useInjectReducer({ key: 'taskModal', reducer: createTaskModalReducer });
   const dispatch = useAppDispatch();
-  const submit = useSubmit();
-  const modalStatus = useSelector<
-    { createTaskModal: ICreateTaskModalConfig },
-    IModalStatus
-  >((state) => state?.createTaskModal?.modalStatus);
+  const { open } = useSelector<{ taskModal: ITaskModalStore }, IModalConfig>(
+    (state) => state?.taskModal?.modalConfig || {}
+  );
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [taskManageDB, setTaskManageDB] = useState<IDBPDatabase>();
@@ -63,19 +62,18 @@ export default () => {
         updateTime: new Date(),
       } as ITaskRecord);
       dispatch(
-        setModalStatus({
+        setModalConfig({
           open: false,
         })
       );
-      const formData = new FormData();
-      formData.append('taskId', taskId);
-      formData.append('threadCounts', form.getFieldValue('threadCounts'));
-      submit(formData, { action: '/task/executor', method: 'post' });
+      if (typeof onConfirm === 'function') {
+        onConfirm(taskId);
+      }
     }
   };
   const handleCancel = () => {
     dispatch(
-      setModalStatus({
+      setModalConfig({
         open: false,
       })
     );
@@ -87,9 +85,18 @@ export default () => {
   useEffect(() => {
     initDB();
   }, []);
+
+  useEffect(() => {
+    if (!open) {
+      console.log(
+        '🚀 ~ file: CreateTaskModal.tsx:96 ~ useEffect ~ open:',
+        open
+      );
+    }
+  }, [open]);
   return (
     <Modal
-      open={modalStatus?.open}
+      open={open}
       title="创建任务"
       onOk={handleConfirm}
       onCancel={handleCancel}
