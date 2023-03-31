@@ -1,6 +1,11 @@
 import type { IDBPDatabase } from 'idb';
 import { useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
+import {
+  EditTwoTone,
+  DeleteTwoTone,
+  PlayCircleTwoTone,
+} from '@ant-design/icons';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { ProcessHelper, initTask, getTaskManageDBInstance } from '../../utils';
 
@@ -57,6 +62,26 @@ const TaskList = () => {
       title: '任务类型',
       dataIndex: 'taskType',
       key: 'taskType',
+    },
+    {
+      title: '操作',
+      align: 'center',
+      key: 'action',
+      render: () => {
+        return (
+          <>
+            <Button type="text">
+              <EditTwoTone />
+            </Button>
+            <Button type="text">
+              <DeleteTwoTone twoToneColor="#ff4d4f" />
+            </Button>
+            <Button type="text">
+              <PlayCircleTwoTone twoToneColor="#73d13d" />
+            </Button>
+          </>
+        );
+      },
     },
   ];
 
