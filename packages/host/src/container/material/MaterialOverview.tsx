@@ -4,7 +4,7 @@ import { useAppDispatch } from '@nmc/common';
 import { useSubmit } from 'react-router-dom';
 
 import { setModalConfig } from '../../redux/taskModalSlice';
-import { CreateTaskModal } from '../../components';
+import { EditTaskModal } from '../../components';
 
 const MaterialOverview = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +23,7 @@ const MaterialOverview = () => {
       >
         创建任务
       </Button>
-      <CreateTaskModal
+      <EditTaskModal
         onConfirm={(taskId: string) => {
           const formData = new FormData();
           formData.append('taskId', taskId);
