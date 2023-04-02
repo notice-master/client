@@ -29,6 +29,7 @@ interface ITaskRecord {
   taskType: string;
   createTime: Date;
   updateTime: Date;
+  index?: number;
 }
 
 type TTaskState = {

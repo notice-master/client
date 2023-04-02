@@ -1,13 +1,19 @@
 import type { IDBPDatabase } from 'idb';
 import { useEffect, useState } from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, Popconfirm } from 'antd';
+import { useSubmit } from 'react-router-dom';
 import {
   EditTwoTone,
   DeleteTwoTone,
   PlayCircleTwoTone,
 } from '@ant-design/icons';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
-import { ProcessHelper, initTask, getTaskManageDBInstance } from '../../utils';
+import {
+  ProcessHelper,
+  initTask,
+  getTaskManageDBInstance,
+  deleteTask,
+} from '../../utils';
 
 const TaskList = () => {
   const [taskManageDB, setTaskManageDB] = useState<IDBPDatabase>();
@@ -17,12 +23,43 @@ const TaskList = () => {
     current: 1,
     pageSize: 10,
   });
+  const submit = useSubmit();
   const initDB = async () => {
     setTaskManageDB(await getTaskManageDBInstance());
   };
   const handleTableChange = (newPagination: TablePaginationConfig) => {
     setPagination(newPagination);
   };
+  const getDataByPage = async (pageNum: number, pageSize: number) => {
+    const result = [];
+    if (taskManageDB) {
+      const tx = taskManageDB.transaction('tasks', 'readonly');
+      let cursor = await tx.store.index('updateTime').openCursor(null, 'prev');
+      let count = 1;
+      while (cursor && result.length < pageSize) {
+        if (count > (pageNum - 1) * pageSize && count <= pageNum * pageSize) {
+          result.push({ ...cursor.value, key: cursor.value.id });
+        }
+        if (result.length >= pageSize) break;
+        count++;
+        cursor = await cursor.continue();
+      }
+    }
+    return result;
+  };
+  const refreshCurrentPage = () => {
+    if (taskManageDB) {
+      const tx = taskManageDB.transaction('tasks', 'readonly');
+      const { current = 1, pageSize = 10 } = pagination;
+      tx.store.count().then((total) => {
+        setPagination({ ...pagination, total });
+      });
+      getDataByPage(current, pageSize).then((data) => {
+        setTasks(data);
+      });
+    }
+  };
+
   const columns: ColumnsType<ITaskRecord> = [
     {
       title: 'ID',
@@ -67,16 +104,37 @@ const TaskList = () => {
       title: '操作',
       align: 'center',
       key: 'action',
-      render: () => {
+      render: (_, { id, index }) => {
         return (
           <>
             <Button type="text">
               <EditTwoTone />
             </Button>
-            <Button type="text">
-              <DeleteTwoTone twoToneColor="#ff4d4f" />
-            </Button>
-            <Button type="text">
+            <Popconfirm
+              title="删除任务"
+              description="确定要删除该任务?"
+              onConfirm={async () => {
+                if (id && index) {
+                  await deleteTask(id, index);
+                  await refreshCurrentPage();
+                }
+              }}
+              okText="确定"
+              cancelText="取消"
+            >
+              <Button type="text">
+                <DeleteTwoTone twoToneColor="#ff4d4f" />
+              </Button>
+            </Popconfirm>
+
+            <Button
+              type="text"
+              onClick={() => {
+                const formData = new FormData();
+                formData.append('taskId', id);
+                submit(formData, { action: '/task/executor', method: 'post' });
+              }}
+            >
               <PlayCircleTwoTone twoToneColor="#73d13d" />
             </Button>
           </>
@@ -85,38 +143,11 @@ const TaskList = () => {
     },
   ];
 
-  const getDataByPage = async (pageNum: number, pageSize: number) => {
-    const result = [];
-    if (taskManageDB) {
-      const tx = taskManageDB.transaction('tasks', 'readonly');
-      let cursor = await tx.store.index('updateTime').openCursor(null, 'prev');
-      let count = 1;
-      while (cursor && result.length < pageSize) {
-        if (count > (pageNum - 1) * pageSize && count <= pageNum * pageSize) {
-          result.push({ ...cursor.value, key: cursor.value.id });
-        }
-        if (result.length >= pageSize) break;
-        count++;
-        cursor = await cursor.continue();
-      }
-    }
-    return result;
-  };
-
   useEffect(() => {
     initDB();
   }, []);
   useEffect(() => {
-    if (taskManageDB) {
-      const tx = taskManageDB.transaction('tasks', 'readonly');
-      const { current = 1, pageSize = 10 } = pagination;
-      tx.store.count().then((total) => {
-        setPagination({ ...pagination, total });
-      });
-      getDataByPage(current, pageSize).then((data) => {
-        setTasks(data);
-      });
-    }
+    refreshCurrentPage();
   }, [taskManageDB, pagination.current, pagination.pageSize]);
 
   return (
