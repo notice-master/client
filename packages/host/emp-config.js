@@ -42,10 +42,8 @@ module.exports = defineConfig(({ mode }) => {
       shareLib: !isESM
         ? cdn(mode)
         : {
-            react: esm("react", mode, "17.0.2"),
-            "react-dom": esm("react-dom", mode, "17.0.2"),
-            mobx: esm("mobx", mode),
-            "mobx-react-lite": esm("mobx-react-lite", mode),
+            react: esm("react", mode, "18.2.0"),
+            "react-dom": esm("react-dom", mode, "18.2.0")
           },
       // shareLib: cdn(mode),
     },

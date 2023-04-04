@@ -58,10 +58,6 @@ const TaskWorker: React.FunctionComponent<TaskWorkerProps> = (props) => {
     }
     if (processHelper) {
       setState(processHelper.state);
-      console.log(
-        '🚀 ~ file: TaskWorker.tsx:62 ~ handleMessage ~ processHelper.state:',
-        processHelper.state
-      );
     }
   };
   useEffect(() => {
