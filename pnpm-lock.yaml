@@ -110,6 +110,7 @@ importers:
       '@efox/emp': ^2.6.4
       '@hookform/resolvers': ^3.0.1
       '@nmc/common': workspace:*
+      '@reduxjs/toolkit': ^1.9.3
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.11
       '@vanilla-extract/css': ^1.10.0
@@ -129,6 +130,7 @@ importers:
       '@ant-design/icons': 4.8.0_biqbaboplfbrettd7655fr4n2y
       '@hookform/resolvers': 3.0.1_react-hook-form@7.43.9
       '@nmc/common': link:../common
+      '@reduxjs/toolkit': 1.9.3_react@18.2.0
       antd: 5.3.1_biqbaboplfbrettd7655fr4n2y
       axios: 0.21.4
       dayjs: 1.11.7
