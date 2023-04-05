@@ -1,5 +1,12 @@
-import { Navigate, Form, useActionData } from 'react-router-dom';
+import {
+  Navigate,
+  Form,
+  useActionData,
+  BrowserRouter,
+  Outlet,
+} from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
+import { Alert } from 'antd';
 import {
   Framework,
   HomePage,
@@ -8,7 +15,10 @@ import {
   NotFoundPage,
 } from '../container';
 import TaskExecutor from 'src/container/task/TaskExecutor';
-
+import React from 'react';
+// const TemplateMessageApp = React.lazy(() => import('@templateMessage/App'));
+import TemplateMessageApp from '../../../template-message/src/App';
+const { ErrorBoundary } = Alert;
 const routes: RouteObject[] = [
   {
     Component: Framework,
@@ -48,6 +58,17 @@ const routes: RouteObject[] = [
         path: 'material/*',
         Component: MaterialEntry,
       },
+      {
+        path: 'template-message/*',
+        // Component: TemplateMessageApp,
+        element: (
+          <React.Suspense fallback="loading...">
+            <ErrorBoundary message={'加载内容失败'} description="">
+              <TemplateMessageApp />
+            </ErrorBoundary>
+          </React.Suspense>
+        ),
+      },
       // {
       //   path: 'settings',
       //   Component: Settings,
@@ -60,21 +81,3 @@ const routes: RouteObject[] = [
   },
 ];
 export default routes;
-
-function Project() {
-  // let project = useLoaderData();
-  const actionData = useActionData();
-  console.log('🚀 ~ file: App.tsx:76 ~ Project ~ actionData:', actionData);
-  return (
-    <>
-      <Form action="/projects/update" method="put">
-        <input type="text" name="projectName" />
-        <button type="submit">Update Project</button>
-      </Form>
-
-      <Form method="delete">
-        <button type="submit">Delete Project</button>
-      </Form>
-    </>
-  );
-}

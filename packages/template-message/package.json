@@ -1,15 +1,15 @@
 {
-  "name": "@nmc/host",
+  "name": "@nmc/template-message",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "emp dev -cl false --env dev",
-    "build": "emp build",
+    "dev": "emp dev -t -cl false --env dev",
+    "build": "emp build -wl",
     "build:ts": "emp build -t -wl",
     "start": "emp serve",
     "stat": "emp build --analyze",
-    "dts": "emp dts"
+    "emp": "emp"
   },
   "author": "Kylong",
   "license": "ISC",
@@ -24,19 +24,16 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.8.0",
-    "@ant-design/pro-components": "^2.4.2",
+    "@hookform/resolvers": "^3.0.1",
     "@nmc/common": "workspace:*",
-    "@reduxjs/toolkit": "^1.9.3",
-    "@types/ramda": "^0.28.23",
     "antd": "^5.3.1",
     "axios": "^0.21.4",
-    "idb": "^7.1.1",
-    "nanoid": "^4.0.1",
-    "ramda": "^0.28.0",
-    "rc-field-form": "^1.29.1",
+    "dayjs": "^1.11.7",
     "react": "^18.2.0",
+    "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.9",
     "react-router-dom": "^6.9.0",
-    "use-before-unload": "^1.0.1"
+    "yup": "^1.0.2"
   }
 }

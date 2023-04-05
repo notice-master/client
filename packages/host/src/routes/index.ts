@@ -15,21 +15,8 @@ export const menuData: MenuItem[] = [
     icon: 'CommentOutlined',
     children: [
       { key: 'material/overview', title: '概览', children: [] },
-      { key: 'template-message/list', title: '素材列表', children: [] },
+      { key: 'template-message/list', title: '模板消息', children: [] },
       { key: 'template-message/edit', title: '编辑素材', children: [] },
-      // {
-      //   key: 'template-message/task',
-      //   title: 'task',
-      //   children: [
-      //     {
-      //       key: 'template-message/task/overview',
-      //       title: '总览',
-      //       children: [],
-      //     },
-      //     { key: 'template-message/task/edit', title: 'edit', children: [] },
-      //     { key: 'template-message/task/task', title: 'task', children: [] },
-      //   ],
-      // },
     ],
   },
   {
