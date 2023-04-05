@@ -13,6 +13,9 @@ module.exports = defineConfig(({ mode, env }) => {
     server: {
       port: 8002,
     },
+    webpackChain: (wpChain) => {
+      wpChain.plugin('VanillaExtractPlugin').use(new VanillaExtractPlugin());
+    },
     empShare: {
       name: 'templateMessage',
 

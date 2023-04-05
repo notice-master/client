@@ -15,13 +15,27 @@ export const getTaskManageDBInstance = () => {
     TASK_MANAGE_DB_VERSION,
     {
       upgrade(db, oldVersion, newVersion, transaction, event) {
-        const store = db.createObjectStore('tasks', {
-          keyPath: 'index',
-          autoIncrement: true,
-        });
-        store.createIndex('id', 'id');
-        store.createIndex('createTime', 'createTime');
-        store.createIndex('updateTime', 'updateTime');
+        // TODO: add generate db function
+        if (!db.objectStoreNames.contains('tasks')) {
+          const tasksStore = db.createObjectStore('tasks', {
+            keyPath: 'index',
+            autoIncrement: true,
+          });
+          tasksStore.createIndex('id', 'id');
+          tasksStore.createIndex('createTime', 'createTime');
+          tasksStore.createIndex('updateTime', 'updateTime');
+        }
+
+        if (!db.objectStoreNames.contains('materials')) {
+          const materialStore = db.createObjectStore('materials', {
+            keyPath: 'index',
+            autoIncrement: true,
+          });
+          materialStore.createIndex('id', 'id');
+          materialStore.createIndex('type', 'type');
+          materialStore.createIndex('createTime', 'createTime');
+          materialStore.createIndex('updateTime', 'updateTime');
+        }
       },
       blocked(currentVersion, blockedVersion, event) {},
       blocking(currentVersion, blockedVersion, event) {},

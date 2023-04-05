@@ -1,14 +1,11 @@
-import { IDBPDatabase, deleteDB } from 'idb';
-import { getTaskDBInstance, getTaskManageDBInstance } from './idb';
 import {
+  IDBPDatabase,
+  deleteDB,
+  getTaskDBInstance,
+  getTaskManageDBInstance,
   INDEXED_DB_PREFIX,
-  TASK_MANAGE_DB_NAME,
-  TASK_MANAGE_DB_VERSION,
-  TASK_STATE_DB_VERSION,
-  PROCESS_STORE_PREFIX,
-  PROCESS_STATUS_STORE_NAME,
   TASK_STATE_DB_NAME,
-} from '../constants';
+} from '@nmc/idb';
 
 export const initTask = async (
   taskId: string | number,

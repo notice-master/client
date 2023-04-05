@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Modal, Input } from 'antd';
-import { IDBPDatabase } from 'idb';
+import type { IDBPDatabase } from '@nmc/idb';
+import { getTaskManageDBInstance } from '@nmc/idb';
 import { nanoid } from 'nanoid';
 import createTaskModalReducer, {
   setModalConfig,
@@ -8,7 +9,6 @@ import createTaskModalReducer, {
   IModalConfig,
 } from '../../redux/taskModalSlice';
 import { useInjectReducer, useSelector, useAppDispatch } from '@nmc/common';
-import { getTaskManageDBInstance, initTask } from '../../utils';
 interface ITaskModalProps {
   onConfirm: (taskId: string) => void;
 }

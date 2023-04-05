@@ -1,4 +1,5 @@
-import type { IDBPDatabase } from 'idb';
+import { getTaskManageDBInstance } from '@nmc/idb';
+import type { IDBPDatabase } from '@nmc/idb';
 import { useEffect, useState } from 'react';
 import { Table, Button, Popconfirm } from 'antd';
 import { useSubmit } from 'react-router-dom';
@@ -8,12 +9,7 @@ import {
   PlayCircleTwoTone,
 } from '@ant-design/icons';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
-import {
-  ProcessHelper,
-  initTask,
-  getTaskManageDBInstance,
-  deleteTask,
-} from '../../utils';
+import { ProcessHelper, initTask, deleteTask } from '../../utils';
 
 const TaskList = () => {
   const [taskManageDB, setTaskManageDB] = useState<IDBPDatabase>();

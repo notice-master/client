@@ -4,15 +4,14 @@
  */
 import axios, { AxiosRequestConfig } from 'axios';
 import * as R from 'ramda';
+import { MessageActions, WorkerStatus, TaskStatus } from '../constants';
 import {
-  MessageActions,
-  WorkerStatus,
-  TaskStatus,
   PROCESS_STORE_PREFIX,
   PROCESS_STATUS_STORE_NAME,
-} from '../constants';
-import { IDBPDatabase } from 'idb';
-import { getMessage, getTaskDBInstance } from '../utils';
+  getTaskDBInstance,
+} from '@nmc/idb';
+import type { IDBPDatabase } from '@nmc/idb';
+import { getMessage } from '../utils';
 
 class TaskWorker implements ITaskWorker {
   public config: TTaskConfig;
