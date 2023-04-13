@@ -16,6 +16,7 @@
   "devDependencies": {
     "@efox/emp": "^2.6.4",
     "@types/react": "^18.0.28",
+    "@types/react-color": "^3.0.6",
     "@types/react-dom": "^18.0.11",
     "@vanilla-extract/css": "^1.10.0",
     "@vanilla-extract/webpack-plugin": "^2.2.0",
@@ -31,6 +32,7 @@
     "antd": "^5.3.1",
     "axios": "^0.21.4",
     "dayjs": "^1.11.7",
+    "nanoid": "^4.0.1",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",

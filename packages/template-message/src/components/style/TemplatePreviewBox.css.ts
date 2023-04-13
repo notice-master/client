@@ -14,7 +14,7 @@ export const withBorder = style({
 export const TemplatePreviewContent = style({
   selectors: {
     [`${TemplatePreviewBox} &`]: {
-      overflowY: 'scroll',
+      overflowY: 'auto',
       flexGrow: 1,
     },
   },

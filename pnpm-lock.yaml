@@ -156,6 +156,7 @@ importers:
       '@nmc/idb': workspace:*
       '@reduxjs/toolkit': ^1.9.3
       '@types/react': ^18.0.28
+      '@types/react-color': ^3.0.6
       '@types/react-dom': ^18.0.11
       '@vanilla-extract/css': ^1.10.0
       '@vanilla-extract/webpack-plugin': ^2.2.0
@@ -164,6 +165,7 @@ importers:
       browserslist: ^4.21.5
       dayjs: ^1.11.7
       eslint: ^8.36.0
+      nanoid: ^4.0.1
       react: ^18.2.0
       react-color: ^2.19.3
       react-dom: ^18.2.0
@@ -179,6 +181,7 @@ importers:
       antd: 5.3.1_biqbaboplfbrettd7655fr4n2y
       axios: 0.21.4
       dayjs: 1.11.7
+      nanoid: 4.0.1
       react: 18.2.0
       react-color: 2.19.3_react@18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -188,6 +191,7 @@ importers:
     devDependencies:
       '@efox/emp': 2.6.4_gkro4eqgpjmil6weamne5ksf7u
       '@types/react': 18.0.28
+      '@types/react-color': 3.0.6
       '@types/react-dom': 18.0.11
       '@vanilla-extract/css': 1.10.0
       '@vanilla-extract/webpack-plugin': 2.2.0
@@ -4126,6 +4130,13 @@ packages:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
     dev: true
 
+  /@types/react-color/3.0.6:
+    resolution: {integrity: sha512-OzPIO5AyRmLA7PlOyISlgabpYUa3En74LP8mTMa0veCA719SvYQov4WLMsHvCgXP+L+KI9yGhYnqZafVGG0P4w==}
+    dependencies:
+      '@types/react': 18.0.28
+      '@types/reactcss': 1.2.6
+    dev: true
+
   /@types/react-dom/18.0.11:
     resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
     dependencies:
@@ -4137,6 +4148,12 @@ packages:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.2
       csstype: 3.1.1
+
+  /@types/reactcss/1.2.6:
+    resolution: {integrity: sha512-qaIzpCuXNWomGR1Xq8SCFTtF4v8V27Y6f+b9+bzHiv087MylI/nTCqqdChNeWS7tslgROmYB7yeiruWX7WnqNg==}
+    dependencies:
+      '@types/react': 18.0.28
+    dev: true
 
   /@types/retry/0.12.0:
     resolution: {integrity: sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==}

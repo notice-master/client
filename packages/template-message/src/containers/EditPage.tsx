@@ -4,8 +4,10 @@ import {
   RollbackOutlined,
   SaveOutlined,
 } from '@ant-design/icons';
+import { nanoid } from 'nanoid';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { gql, useAppDispatch, useInjectReducer, useQuery } from '@nmc/common';
+import { getTaskManageDBInstance } from '@nmc/idb';
 import {
   Button,
   Card,
@@ -25,7 +27,7 @@ import {
   useForm,
   useWatch,
 } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import {
   DynamicTagsPanel,
@@ -53,6 +55,7 @@ const schema = yup
   .required();
 const EditPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [currentTemplate, setCurrentTemplate] = useState<teamplateType | null>(
     null
   );
@@ -201,30 +204,7 @@ const EditPage = () => {
       __typename: 'Template',
     },
   ];
-  const templatesService = useQuery(gql`
-    query getTemplates($refresh: Boolean!) {
-      templates(refresh: $refresh) {
-        template_id
-        title
-        primary_industry
-        deputy_industry
-        content
-        example
-      }
-    }
-  `);
   const teamplatesObject: teamplatesObjectType = {};
-  // if (templatesService?.data) {
-  //   const {
-  //     data: { templates },
-  //   } = templatesService;
-  //   if (templates.length) {
-  //     templates.reduce((obj: teamplatesObjectType, cur: teamplateType) => {
-  //       obj[cur.template_id] = cur;
-  //       return obj;
-  //     }, teamplatesObject);
-  //   }
-  // }
   if (templates.length) {
     templates.reduce((obj: teamplatesObjectType, cur: teamplateType) => {
       obj[cur.template_id] = cur;
@@ -232,9 +212,22 @@ const EditPage = () => {
     }, teamplatesObject);
   }
 
-  const onSubmit = (values: any) => {
-    console.log('values: ', values);
-    console.log('errors: ', errors);
+  const onSubmit = async (values: any) => {
+    const db = await getTaskManageDBInstance();
+    db.add('materials', {
+      id: nanoid(),
+      type: 'template-message',
+      templateData: currentTemplate,
+      requestData: fieldDatas,
+      createTime: new Date(),
+      updateTime: new Date(),
+    })
+      .then(() => {
+        navigate('../list');
+      })
+      .finally(() => {
+        db.close();
+      });
   };
   return (
     <div className="site-card-wrapper">
