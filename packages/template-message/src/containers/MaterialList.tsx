@@ -15,7 +15,9 @@ import { TemplatePreview } from '../components';
 const MaterialList = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [materilas, setMaterilas] = useState<any[]>([]);
+  const [materilas, setMaterilas] = useState<IMaterialTemplateMessageDetail[]>(
+    []
+  );
   const [taskManageDB, setTaskManageDB] = useState<IDBPDatabase>();
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     total: 0,
@@ -67,7 +69,8 @@ const MaterialList = () => {
   }, []);
   return (
     <Row gutter={[8, 8]}>
-      {materilas.map(({ requestData, id, templateData }) => {
+      {materilas.map((material) => {
+        const { requestData, id, templateData } = material;
         return (
           <Col xs={24} md={12} lg={8} xl={6} key={id}>
             <Card
@@ -79,7 +82,7 @@ const MaterialList = () => {
                     // history.push
                     navigate('/template-message/edit', {
                       replace: true,
-                      state: { requestData },
+                      state: { material },
                     });
                   }}
                 />,

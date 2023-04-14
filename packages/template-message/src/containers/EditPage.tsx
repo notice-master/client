@@ -54,6 +54,7 @@ const schema = yup
   })
   .required();
 const EditPage = () => {
+  const [materialId, setMaterialId] = useState('');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [currentTemplate, setCurrentTemplate] = useState<teamplateType | null>(
@@ -91,16 +92,15 @@ const EditPage = () => {
   });
   const templateFieldGroupRef = useRef<TemplateFieldGroupHandles>();
   useEffect(() => {
-    let defaultValues = {};
     if (state) {
       const { material } = state;
       if (material) {
-        const { final_data, template_detail } = material;
-        const templateDetail = JSON.parse(decodeURIComponent(template_detail));
+        const { requestData, templateData, id } =
+          material as IMaterialTemplateMessageDetail;
         try {
-          setCurrentTemplate(templateDetail);
-          defaultValues = JSON.parse(decodeURIComponent(final_data));
-          reset(defaultValues);
+          setMaterialId(id);
+          setCurrentTemplate(templateData);
+          reset(requestData);
         } catch (e) {
           console.error('e: ', e);
         }
@@ -214,20 +214,31 @@ const EditPage = () => {
 
   const onSubmit = async (values: any) => {
     const db = await getTaskManageDBInstance();
-    db.add('materials', {
-      id: nanoid(),
-      type: 'template-message',
-      templateData: currentTemplate,
-      requestData: fieldDatas,
-      createTime: new Date(),
-      updateTime: new Date(),
-    })
-      .then(() => {
-        navigate('../list');
-      })
-      .finally(() => {
-        db.close();
+    if (materialId) {
+      await db
+        .transaction('materials', 'readwrite')
+        .store.index('id')
+        .openCursor(materialId)
+        .then((item) => {
+          item?.update({
+            ...item.value,
+            templateData: currentTemplate,
+            requestData: fieldDatas,
+            updateTime: new Date(),
+          });
+        });
+    } else {
+      await db.add('materials', {
+        id: nanoid(),
+        type: 'template-message',
+        templateData: currentTemplate,
+        requestData: fieldDatas,
+        createTime: new Date(),
+        updateTime: new Date(),
       });
+    }
+    navigate('../list');
+    db.close();
   };
   return (
     <div className="site-card-wrapper">
