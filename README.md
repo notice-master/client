@@ -1,6 +1,6 @@
 # 选型
 
-![example workflow](https://github.com/github/docs/actions/workflows/build.yml/badge.svg)
+![example workflow](https://github.com/notice-master/client/actions/workflows/build.yml/badge.svg)
 
 [TOC]
 
