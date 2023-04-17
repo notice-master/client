@@ -6,7 +6,8 @@ import {
 import { getTaskManageDBInstance } from '@nmc/idb';
 import { gql, useAppDispatch, useQuery } from '@nmc/common';
 import type { IDBPDatabase } from '@nmc/idb';
-import { Button, Card, Col, Row } from 'antd';
+import { Pagination, Card, Col, Row } from 'antd';
+import type { PaginationProps } from 'antd';
 import type { TablePaginationConfig } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +23,7 @@ const MaterialList = () => {
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     total: 0,
     current: 1,
-    pageSize: 10,
+    pageSize: 8,
   });
   const getDataByPage = async (pageNum: number, pageSize: number) => {
     const result = [];
@@ -43,16 +44,12 @@ const MaterialList = () => {
   };
   const refreshCurrentPage = () => {
     if (taskManageDB) {
-      const tx = taskManageDB.transaction('tasks', 'readonly');
+      const tx = taskManageDB.transaction('materials', 'readonly');
       const { current = 1, pageSize = 10 } = pagination;
       tx.store.count().then((total) => {
         setPagination({ ...pagination, total });
       });
       getDataByPage(current, pageSize).then((data) => {
-        console.log(
-          '🚀 ~ file: MaterialList.tsx:50 ~ getDataByPage ~ data:',
-          data
-        );
         setMaterilas(data);
       });
     }
@@ -67,38 +64,60 @@ const MaterialList = () => {
   useEffect(() => {
     initDB();
   }, []);
+
+  const handlePaginationChange = (page: number, pageSize: number) => {
+    setPagination({
+      ...pagination,
+      current: page,
+      pageSize,
+    });
+  };
+
   return (
-    <Row gutter={[8, 8]}>
-      {materilas.map((material) => {
-        const { requestData, id, templateData } = material;
-        return (
-          <Col xs={24} md={12} lg={8} xl={6} key={id}>
-            <Card
-              bodyStyle={{ padding: '0px' }}
-              actions={[
-                <SendOutlined key="send" label="发送" />,
-                <EditOutlined
-                  onClick={() => {
-                    // history.push
-                    navigate('/template-message/edit', {
-                      replace: true,
-                      state: { material },
-                    });
-                  }}
-                />,
-                <EllipsisOutlined onClick={() => {}} />,
-              ]}
-            >
-              <TemplatePreview
-                style={{ height: '300px' }}
-                template={templateData}
-                data={requestData}
-              />
-            </Card>
-          </Col>
-        );
-      })}
-    </Row>
+    <div>
+      <Row gutter={[8, 8]}>
+        {materilas.map((material) => {
+          const { requestData, id, templateData } = material;
+          return (
+            <Col xs={24} md={12} lg={8} xl={6} key={id}>
+              <Card
+                bodyStyle={{ padding: '0px' }}
+                actions={[
+                  <SendOutlined key="send" label="发送" />,
+                  <EditOutlined
+                    onClick={() => {
+                      // history.push
+                      navigate('/template-message/edit', {
+                        replace: true,
+                        state: { material },
+                      });
+                    }}
+                  />,
+                  <EllipsisOutlined onClick={() => {}} />,
+                ]}
+              >
+                <TemplatePreview
+                  style={{ height: '300px' }}
+                  template={templateData}
+                  data={requestData}
+                />
+              </Card>
+            </Col>
+          );
+        })}
+        <Col xs={24} md={24}>
+          <Pagination
+            style={{ float: 'right' }}
+            showSizeChanger
+            current={pagination.current}
+            pageSize={pagination.pageSize}
+            total={pagination.total}
+            onChange={handlePaginationChange}
+            pageSizeOptions={[8, 12, 20, 40, 80, 100]}
+          />
+        </Col>
+      </Row>
+    </div>
   );
 };
 
