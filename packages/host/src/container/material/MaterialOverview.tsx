@@ -1,36 +1,10 @@
 import React, { useEffect } from 'react';
 import { Button } from 'antd';
-import { useAppDispatch } from '@nmc/common';
-import { useSubmit } from 'react-router-dom';
-
-import { setModalConfig } from '../../redux/taskModalSlice';
-import { EditTaskModal } from '../../components';
+import { useAppDispatch, setModalConfig } from '@nmc/common';
 
 const MaterialOverview = () => {
   const dispatch = useAppDispatch();
-  const submit = useSubmit();
   useEffect(() => {}, []);
-  return (
-    <div>
-      <Button
-        onClick={() => {
-          dispatch(
-            setModalConfig({
-              open: true,
-            })
-          );
-        }}
-      >
-        创建任务
-      </Button>
-      <EditTaskModal
-        onConfirm={(taskId: string) => {
-          const formData = new FormData();
-          formData.append('taskId', taskId);
-          submit(formData, { action: '/task/executor', method: 'post' });
-        }}
-      />
-    </div>
-  );
+  return <div>building</div>;
 };
 export default MaterialOverview;

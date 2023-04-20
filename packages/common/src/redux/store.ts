@@ -4,10 +4,12 @@ import createSagaMiddleware from 'redux-saga';
 import { combineReducers } from 'redux';
 import dictionaryReducer from './dictionarySlice';
 import globalReducer from './globalSlice';
+import taskModalReducer from './taskModalSlice';
 
 const defaultReducers = {
   global: globalReducer,
   dictionary: dictionaryReducer,
+  taskModal: taskModalReducer,
 };
 const sagaMiddleware = createSagaMiddleware();
 const runSaga = sagaMiddleware.run;

@@ -4,7 +4,7 @@ import {
   SendOutlined,
 } from '@ant-design/icons';
 import { getTaskManageDBInstance } from '@nmc/idb';
-import { gql, useAppDispatch, useQuery } from '@nmc/common';
+import { gql, useAppDispatch, useQuery, setModalConfig } from '@nmc/common';
 import type { IDBPDatabase } from '@nmc/idb';
 import { Pagination, Card, Col, Row } from 'antd';
 import type { PaginationProps } from 'antd';
@@ -83,7 +83,17 @@ const MaterialList = () => {
               <Card
                 bodyStyle={{ padding: '0px' }}
                 actions={[
-                  <SendOutlined key="send" label="发送" />,
+                  <SendOutlined
+                    key="send"
+                    label="发送"
+                    onClick={() => {
+                      dispatch(
+                        setModalConfig({
+                          open: true,
+                        })
+                      );
+                    }}
+                  />,
                   <EditOutlined
                     onClick={() => {
                       // history.push

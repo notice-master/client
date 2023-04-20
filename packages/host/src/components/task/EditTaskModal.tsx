@@ -3,17 +3,12 @@ import { Form, Modal, Input } from 'antd';
 import type { IDBPDatabase } from '@nmc/idb';
 import { getTaskManageDBInstance } from '@nmc/idb';
 import { nanoid } from 'nanoid';
-import createTaskModalReducer, {
-  setModalConfig,
-  ITaskModalStore,
-  IModalConfig,
-} from '../../redux/taskModalSlice';
-import { useInjectReducer, useSelector, useAppDispatch } from '@nmc/common';
+import { useSelector, useAppDispatch, setModalConfig } from '@nmc/common';
+import type { ITaskModalStore, IModalConfig } from '@nmc/common';
 interface ITaskModalProps {
   onConfirm: (taskId: string) => void;
 }
 export default ({ onConfirm }: ITaskModalProps) => {
-  useInjectReducer({ key: 'taskModal', reducer: createTaskModalReducer });
   const dispatch = useAppDispatch();
   const { open } = useSelector<{ taskModal: ITaskModalStore }, IModalConfig>(
     (state) => state?.taskModal?.modalConfig || {}
@@ -66,6 +61,7 @@ export default ({ onConfirm }: ITaskModalProps) => {
           open: false,
         })
       );
+      setConfirmLoading(false);
       if (typeof onConfirm === 'function') {
         onConfirm(taskId);
       }
