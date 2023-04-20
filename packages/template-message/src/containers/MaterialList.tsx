@@ -87,7 +87,7 @@ const MaterialList = () => {
                   <EditOutlined
                     onClick={() => {
                       // history.push
-                      navigate('/template-message/edit', {
+                      navigate('../edit', {
                         replace: true,
                         state: { material },
                       });
