@@ -18,11 +18,14 @@ const TaskExecutor = () => {
   }
   const { taskId, threadCounts } = actionData;
   const [db, setDB] = useState<IDBPDatabase>();
-  const [taskConfig, setTaskConfig] = useState<TTaskConfig>();
-  const [defaultRequestConfig, setDefaultRequestConfig] =
-    useState<AxiosRequestConfig>();
+  const [taskRecord, setTaskRecord] = useState<ITaskRecord>();
   const [state, setState] = useState(false);
   const [workerPool, setWorkerPool] = useState<WorkerPoolType>({});
+  const taskConfig = useMemo(() => taskRecord?.taskConfig, [taskRecord]);
+  const defaultRequestConfig = useMemo(
+    () => taskRecord?.defaultRequestConfig,
+    [taskRecord]
+  );
   useBeforeUnload((event) => {
     if (state) {
       return '任务已创建,确定要离开?';
@@ -31,11 +34,11 @@ const TaskExecutor = () => {
     }
   });
   const init = async () => {
-    if (!state && taskConfig?.taskId) {
+    if (!state && taskRecord?.threadCounts && taskConfig?.taskId) {
       setState(true);
       const { db, workerPool } = await initTask(
         taskConfig.taskId,
-        threadCounts
+        taskRecord.threadCounts
       );
       setDB(db);
       setWorkerPool(workerPool);
@@ -90,8 +93,7 @@ const TaskExecutor = () => {
         .get(taskId)
         .then((data) => {
           const { taskConfig, defaultRequestConfig } = data;
-          setTaskConfig(taskConfig);
-          setDefaultRequestConfig(defaultRequestConfig);
+          setTaskRecord(data);
         });
     }
   }, [taskManageDB]);

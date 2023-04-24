@@ -22,7 +22,7 @@ export default ({ onConfirm }: ITaskModalProps) => {
       setConfirmLoading(true);
       await taskManageDB.add('tasks', {
         id: taskId,
-        threadCounts: form.getFieldValue('threadCounts'),
+        threadCounts: Number(form.getFieldValue('threadCounts')),
         taskConfig: {
           delay: 500,
           total: 83,
@@ -115,7 +115,7 @@ export default ({ onConfirm }: ITaskModalProps) => {
             },
           ]}
         >
-          <Input value={10} />
+          <Input />
         </Form.Item>
       </Form>
     </Modal>

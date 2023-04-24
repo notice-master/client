@@ -12,7 +12,7 @@ export const initTask = async (
   threadCounts: number
 ): Promise<{ db: IDBPDatabase; workerPool: WorkerPoolType }> => {
   const workerPool: WorkerPoolType = {};
-  new Array(threadCounts).fill('').forEach((val, index) => {
+  new Array(Number(threadCounts)).fill('').forEach((val, index) => {
     const key = Math.random().toString(32).substring(3);
     workerPool[key] = { key };
   });

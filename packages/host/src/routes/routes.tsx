@@ -37,7 +37,6 @@ const routes: RouteObject[] = [
               const formData = await request.formData();
               return {
                 taskId: formData.get('taskId'),
-                threadCounts: Number(formData.get('threadCounts')) || 10,
               };
             }
             default: {
