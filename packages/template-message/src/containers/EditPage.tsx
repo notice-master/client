@@ -15,6 +15,7 @@ import {
   Divider,
   Form,
   Input,
+  Space,
   message,
   Row,
   Select,
@@ -297,7 +298,7 @@ const EditPage = () => {
                 }
               >
                 <Form.Item label="选择模板">
-                  <Input.Group compact style={{ display: 'flex' }}>
+                  <Space.Compact size="large" style={{ display: 'flex' }}>
                     <Controller
                       name="template_id"
                       control={control}
@@ -337,7 +338,7 @@ const EditPage = () => {
                       )}
                     />
                     <Button type="primary">更新列表</Button>
-                  </Input.Group>
+                  </Space.Compact>
                 </Form.Item>
                 <Form.Item label="消息链接">
                   <LinkInput />

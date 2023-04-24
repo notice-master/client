@@ -1,6 +1,6 @@
 import { CopyOutlined } from '@ant-design/icons';
 import { copy } from '@nmc/common';
-import { Button, Input, message, Select, Tooltip } from 'antd';
+import { Space, Input, message, Select, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
@@ -52,7 +52,7 @@ const LinkInput = () => {
     }
   }, [linkPrefix, link]);
   return (
-    <Input.Group compact style={{ display: 'flex' }}>
+    <Space.Compact size="large" style={{ display: 'flex' }}>
       <Input
         ref={ref}
         onChange={(event) => {
@@ -74,7 +74,7 @@ const LinkInput = () => {
           </Tooltip>
         }
       />
-    </Input.Group>
+    </Space.Compact>
   );
 };
 export default LinkInput;

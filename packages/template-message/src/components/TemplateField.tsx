@@ -1,5 +1,5 @@
 import { FontColorsOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Popover, Tooltip } from 'antd';
+import { Button, Form, Input, Popover, Tooltip, Space } from 'antd';
 import { TextAreaRef } from 'antd/lib/input/TextArea';
 import React, {
   forwardRef,
@@ -71,7 +71,7 @@ const TemplateField: React.ForwardRefRenderFunction<
   }, []);
   return (
     <Form.Item label={name}>
-      <Input.Group compact style={{ display: 'flex' }}>
+      <Space.Compact size="large" style={{ display: 'flex' }}>
         <Controller
           name={`data.${name}`}
           control={control}
@@ -117,7 +117,7 @@ const TemplateField: React.ForwardRefRenderFunction<
             </>
           )}
         />
-      </Input.Group>
+      </Space.Compact>
     </Form.Item>
   );
 };
