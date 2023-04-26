@@ -16,7 +16,7 @@ const TaskExecutor = () => {
   if (!actionData) {
     return <Navigate replace to="../task/overview" />;
   }
-  const { taskId, threadCounts } = actionData;
+  const { taskId } = actionData;
   const [db, setDB] = useState<IDBPDatabase>();
   const [taskRecord, setTaskRecord] = useState<ITaskRecord>();
   const [state, setState] = useState(false);
@@ -57,7 +57,7 @@ const TaskExecutor = () => {
         return tx.store.add({
           id: openid,
           config: {
-            params: {
+            data: {
               touser: openid,
             },
           },

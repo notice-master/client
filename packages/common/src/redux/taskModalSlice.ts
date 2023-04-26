@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { AxiosRequestConfig } from 'axios';
 
-export interface IModalConfig {
+export interface ITaskModalConfig {
   open: boolean;
+  defaultRequestConfig?: AxiosRequestConfig;
 }
 export interface ITaskModalStore {
-  modalConfig: IModalConfig;
+  modalConfig: ITaskModalConfig;
 }
 
 const initialState: ITaskModalStore = {
@@ -16,9 +18,8 @@ export const taskModalSlice = createSlice({
   name: 'taskModal',
   initialState,
   reducers: {
-    setModalConfig: (state, action: PayloadAction<IModalConfig>) => {
+    setModalConfig: (state, action: PayloadAction<ITaskModalConfig>) => {
       state.modalConfig = {
-        ...state.modalConfig,
         ...action.payload,
       };
     },

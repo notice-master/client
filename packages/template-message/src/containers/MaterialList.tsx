@@ -90,6 +90,19 @@ const MaterialList = () => {
                       dispatch(
                         setModalConfig({
                           open: true,
+                          defaultRequestConfig: {
+                            url: 'https://w.1717shua.cn/addons/zjl_mass_tpl_msg/apiAgent.php',
+                            params: {
+                              api: 'message/template/send',
+                              access_token: 'test_token',
+                            },
+                            data: requestData,
+                            method: 'POST',
+                            headers: {
+                              'Content-Type':
+                                'application/x-www-form-urlencoded',
+                            },
+                          },
                         })
                       );
                     }}

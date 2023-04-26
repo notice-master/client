@@ -4,19 +4,20 @@ import type { IDBPDatabase } from '@nmc/idb';
 import { getTaskManageDBInstance } from '@nmc/idb';
 import { nanoid } from 'nanoid';
 import { useSelector, useAppDispatch, setModalConfig } from '@nmc/common';
-import type { ITaskModalStore, IModalConfig } from '@nmc/common';
+import type { ITaskModalStore, ITaskModalConfig } from '@nmc/common';
 interface ITaskModalProps {
   onConfirm: (taskId: string) => void;
 }
 export default ({ onConfirm }: ITaskModalProps) => {
   const dispatch = useAppDispatch();
-  const { open } = useSelector<{ taskModal: ITaskModalStore }, IModalConfig>(
-    (state) => state?.taskModal?.modalConfig || {}
-  );
+  const { open, defaultRequestConfig } = useSelector<
+    { taskModal: ITaskModalStore },
+    ITaskModalConfig
+  >((state) => state?.taskModal?.modalConfig || {});
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [taskManageDB, setTaskManageDB] = useState<IDBPDatabase>();
-  const [taskId] = useState(nanoid());
+  const [taskId, setTaskId] = useState(nanoid());
   const handleConfirm = async () => {
     if (taskManageDB) {
       setConfirmLoading(true);
@@ -28,29 +29,7 @@ export default ({ onConfirm }: ITaskModalProps) => {
           total: 83,
           taskId: taskId,
         },
-        defaultRequestConfig: {
-          url: 'https://w.1717shua.cn/addons/zjl_mass_tpl_msg/apiAgent.php',
-          params: {
-            api: 'message/template/send',
-            access_token: 'test_token',
-          },
-          data: {
-            touser: 'ot7Ngwyd0fEwZqq_DCZ6Yt9xQ6Qc',
-            template_id: 'f1DPMaEr-Q8WRYxmgxG67YCD8zoOOuyJCpel1OJEax0',
-            url: '',
-            miniprogram: { appid: '', pagepath: '' },
-            data: {
-              first: { value: '', color: '#000000' },
-              keyword1: { value: '', color: '#000000' },
-              keyword2: { value: '', color: '#000000' },
-              remark: { value: '', color: '#000000' },
-            },
-          },
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        },
+        defaultRequestConfig: defaultRequestConfig,
         dataType: 'template-message',
         taskType: 'local',
         createTime: new Date(),
@@ -84,10 +63,7 @@ export default ({ onConfirm }: ITaskModalProps) => {
 
   useEffect(() => {
     if (!open) {
-      console.log(
-        '🚀 ~ file: CreateTaskModal.tsx:96 ~ useEffect ~ open:',
-        open
-      );
+      setTaskId(nanoid());
     }
   }, [open]);
   return (
@@ -97,6 +73,8 @@ export default ({ onConfirm }: ITaskModalProps) => {
       onOk={handleConfirm}
       onCancel={handleCancel}
       confirmLoading={confirmLoading}
+      okText="确认"
+      cancelText="取消"
     >
       <Form
         form={form}
