@@ -155,6 +155,7 @@ importers:
       '@nmc/common': workspace:*
       '@nmc/idb': workspace:*
       '@reduxjs/toolkit': ^1.9.3
+      '@types/ramda': ^0.28.23
       '@types/react': ^18.0.28
       '@types/react-color': ^3.0.6
       '@types/react-dom': ^18.0.11
@@ -166,6 +167,7 @@ importers:
       dayjs: ^1.11.7
       eslint: ^8.36.0
       nanoid: ^4.0.1
+      ramda: ^0.28.0
       react: ^18.2.0
       react-color: ^2.19.3
       react-dom: ^18.2.0
@@ -182,6 +184,7 @@ importers:
       axios: 0.21.4
       dayjs: 1.11.7
       nanoid: 4.0.1
+      ramda: 0.28.0
       react: 18.2.0
       react-color: 2.19.3_react@18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -190,6 +193,7 @@ importers:
       yup: 1.0.2
     devDependencies:
       '@efox/emp': 2.6.4_gkro4eqgpjmil6weamne5ksf7u
+      '@types/ramda': 0.28.23
       '@types/react': 18.0.28
       '@types/react-color': 3.0.6
       '@types/react-dom': 18.0.11
@@ -4124,7 +4128,6 @@ packages:
     resolution: {integrity: sha512-9TYWiwkew+mCMsL7jZ+kkzy6QXn8PL5/SKmBPmjgUlTpkokZWTBr+OhiIUDztpAEbslWyt24NNfEmZUBFmnXig==}
     dependencies:
       ts-toolbelt: 6.15.5
-    dev: false
 
   /@types/range-parser/1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
@@ -10011,7 +10014,6 @@ packages:
 
   /ts-toolbelt/6.15.5:
     resolution: {integrity: sha512-FZIXf1ksVyLcfr7M317jbB67XFJhOO1YqdTcuGaq9q5jLUoTikukZ+98TPjKiP2jC5CgmYdWWYs0s2nLSU0/1A==}
-    dev: false
 
   /tsconfig-paths/3.14.2:
     resolution: {integrity: sha512-o/9iXgCYc5L/JxCHPe3Hvh8Q/2xm5Z+p18PESBU6Ff33695QnCHBEjcytY2q19ua7Mbl/DavtBOLq+oG0RCL+g==}

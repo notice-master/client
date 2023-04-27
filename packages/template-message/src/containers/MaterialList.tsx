@@ -11,6 +11,7 @@ import type { PaginationProps } from 'antd';
 import type { TablePaginationConfig } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as R from 'ramda';
 import { TemplatePreview } from '../components';
 
 const MaterialList = () => {
@@ -96,7 +97,7 @@ const MaterialList = () => {
                               api: 'message/template/send',
                               access_token: 'test_token',
                             },
-                            data: requestData,
+                            data: R.clone(requestData),
                             method: 'POST',
                             headers: {
                               'Content-Type':
@@ -112,7 +113,7 @@ const MaterialList = () => {
                       // history.push
                       navigate('../edit', {
                         replace: true,
-                        state: { material },
+                        state: { material: R.clone(material) },
                       });
                     }}
                   />,
