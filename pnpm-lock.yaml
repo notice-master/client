@@ -87,7 +87,6 @@ importers:
       '@nmc/common': link:../common
       '@nmc/idb': link:../idb
       '@reduxjs/toolkit': 1.9.3_react@18.2.0
-      '@types/ramda': 0.28.23
       antd: 5.3.1_biqbaboplfbrettd7655fr4n2y
       axios: 0.21.4
       nanoid: 4.0.1
@@ -99,6 +98,7 @@ importers:
       use-before-unload: 1.0.1_react@18.2.0
     devDependencies:
       '@efox/emp': 2.6.4_gkro4eqgpjmil6weamne5ksf7u
+      '@types/ramda': 0.28.23
       '@types/react': 18.0.28
       '@types/react-dom': 18.0.11
       '@vanilla-extract/css': 1.10.0
@@ -4130,6 +4130,7 @@ packages:
     resolution: {integrity: sha512-9TYWiwkew+mCMsL7jZ+kkzy6QXn8PL5/SKmBPmjgUlTpkokZWTBr+OhiIUDztpAEbslWyt24NNfEmZUBFmnXig==}
     dependencies:
       ts-toolbelt: 6.15.5
+    dev: true
 
   /@types/range-parser/1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
@@ -10016,6 +10017,7 @@ packages:
 
   /ts-toolbelt/6.15.5:
     resolution: {integrity: sha512-FZIXf1ksVyLcfr7M317jbB67XFJhOO1YqdTcuGaq9q5jLUoTikukZ+98TPjKiP2jC5CgmYdWWYs0s2nLSU0/1A==}
+    dev: true
 
   /tsconfig-paths/3.14.2:
     resolution: {integrity: sha512-o/9iXgCYc5L/JxCHPe3Hvh8Q/2xm5Z+p18PESBU6Ff33695QnCHBEjcytY2q19ua7Mbl/DavtBOLq+oG0RCL+g==}
