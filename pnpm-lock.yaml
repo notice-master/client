@@ -19,6 +19,7 @@ importers:
       '@apollo/client': ^3.7.10
       '@efox/emp': ^2.6.4
       '@reduxjs/toolkit': ^1.9.3
+      '@types/ramda': ^0.28.23
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.11
       axios: ^0.21.4
@@ -50,6 +51,7 @@ importers:
       redux-saga: 1.2.3
     devDependencies:
       '@efox/emp': 2.6.4_gkro4eqgpjmil6weamne5ksf7u
+      '@types/ramda': 0.28.23
       '@types/react': 18.0.28
       '@types/react-dom': 18.0.11
       browserslist: 4.21.5

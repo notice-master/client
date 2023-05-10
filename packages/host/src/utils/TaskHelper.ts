@@ -2,7 +2,7 @@ import {
   IDBPDatabase,
   deleteDB,
   getTaskDBInstance,
-  getTaskManageDBInstance,
+  getManageDBInstance,
   INDEXED_DB_PREFIX,
   TASK_STATE_DB_NAME,
 } from '@nmc/idb';
@@ -23,14 +23,20 @@ export const initTask = async (
   };
 };
 
-export const deleteTask = async (taskId: string, index: number) => {
+export const deleteTask = async (
+  appId: string,
+  taskId: string,
+  index: number
+) => {
   if (taskId && index) {
-    const db = await getTaskManageDBInstance();
-    db.transaction('tasks', 'readwrite').store.delete(index);
-    deleteDB(`${INDEXED_DB_PREFIX}${TASK_STATE_DB_NAME}${taskId}`, {
-      blocked: (version) => {
-        console.log('🚀 ~ delete version:', version);
-      },
-    });
+    const db = await getManageDBInstance(appId);
+    if (db) {
+      db.transaction('tasks', 'readwrite').store.delete(index);
+      deleteDB(`${INDEXED_DB_PREFIX}${TASK_STATE_DB_NAME}${taskId}`, {
+        blocked: (version) => {
+          console.log('🚀 ~ delete version:', version);
+        },
+      });
+    }
   }
 };

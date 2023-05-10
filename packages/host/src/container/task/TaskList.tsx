@@ -1,5 +1,7 @@
-import { getTaskManageDBInstance } from '@nmc/idb';
+import { getManageDBInstance } from '@nmc/idb';
 import type { IDBPDatabase } from '@nmc/idb';
+import { useSelector } from '@nmc/common';
+import type { GlobalState } from '@nmc/common';
 import { useEffect, useState } from 'react';
 import { Table, Button, Popconfirm } from 'antd';
 import { useSubmit } from 'react-router-dom';
@@ -12,6 +14,9 @@ import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { ProcessHelper, initTask, deleteTask } from '../../utils';
 
 const TaskList = () => {
+  const { appId = '' } = useSelector<{ global: GlobalState }, GlobalState>(
+    (state) => state?.global || {}
+  );
   const [taskManageDB, setTaskManageDB] = useState<IDBPDatabase>();
   const [tasks, setTasks] = useState<ITaskRecord[]>();
   const [pagination, setPagination] = useState<TablePaginationConfig>({
@@ -21,7 +26,8 @@ const TaskList = () => {
   });
   const submit = useSubmit();
   const initDB = async () => {
-    setTaskManageDB(await getTaskManageDBInstance());
+    const db = await getManageDBInstance(appId);
+    db && setTaskManageDB(db);
   };
   const handleTableChange = (newPagination: TablePaginationConfig) => {
     setPagination(newPagination);
@@ -111,7 +117,7 @@ const TaskList = () => {
               description="确定要删除该任务?"
               onConfirm={async () => {
                 if (id && index) {
-                  await deleteTask(id, index);
+                  await deleteTask(appId, id, index);
                   await refreshCurrentPage();
                 }
               }}

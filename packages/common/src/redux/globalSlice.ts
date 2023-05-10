@@ -1,15 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import * as R from 'ramda';
 
-export interface CurrentPageInfo {
-  title: string;
-  subtitle: string;
-}
 export interface GlobalState {
-  currentPageInfo: CurrentPageInfo;
+  appId: string;
+  accounts: {
+    wechatAppId: string;
+  };
 }
 
 const initialState: GlobalState = {
-  currentPageInfo: { title: 'Title', subtitle: 'This is a subtitle' },
+  appId: 'test_app_id',
+  accounts: {
+    wechatAppId: 'test_wechat_app_id',
+  },
 };
 
 export const globalSlice = createSlice({
@@ -17,10 +20,7 @@ export const globalSlice = createSlice({
   initialState,
   reducers: {
     setGlobalState: (state, action: PayloadAction<GlobalState>) => {
-      for (const _key in action.payload) {
-        const key = _key as keyof GlobalState;
-        state[key] = action.payload[key];
-      }
+      return R.mergeDeepLeft(action.payload, state);
     },
   },
 });

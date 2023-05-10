@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Modal, Input } from 'antd';
 import type { IDBPDatabase } from '@nmc/idb';
-import { getTaskManageDBInstance } from '@nmc/idb';
+import { getManageDBInstance } from '@nmc/idb';
 import { nanoid } from 'nanoid';
 import { useSelector, useAppDispatch, setModalConfig } from '@nmc/common';
-import type { ITaskModalStore, ITaskModalConfig } from '@nmc/common';
+import type {
+  ITaskModalStore,
+  ITaskModalConfig,
+  GlobalState,
+} from '@nmc/common';
 interface ITaskModalProps {
   onConfirm: (taskId: string) => void;
 }
@@ -14,6 +18,9 @@ export default ({ onConfirm }: ITaskModalProps) => {
     { taskModal: ITaskModalStore },
     ITaskModalConfig
   >((state) => state?.taskModal?.modalConfig || {});
+  const { appId = '' } = useSelector<{ global: GlobalState }, GlobalState>(
+    (state) => state?.global || {}
+  );
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [taskManageDB, setTaskManageDB] = useState<IDBPDatabase>();
@@ -54,7 +61,8 @@ export default ({ onConfirm }: ITaskModalProps) => {
     );
   };
   const initDB = async () => {
-    setTaskManageDB(await getTaskManageDBInstance());
+    const db = await getManageDBInstance(appId);
+    db && setTaskManageDB(db);
   };
 
   useEffect(() => {

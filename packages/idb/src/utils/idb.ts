@@ -1,18 +1,19 @@
 import { openDB, IDBPDatabase } from 'idb';
 import {
   INDEXED_DB_PREFIX,
-  TASK_MANAGE_DB_NAME,
-  TASK_MANAGE_DB_VERSION,
+  MANAGE_DB_NAME,
+  MANAGE_DB_VERSION,
   TASK_STATE_DB_VERSION,
   PROCESS_STORE_PREFIX,
   PROCESS_STATUS_STORE_NAME,
   TASK_STATE_DB_NAME,
 } from '../constants';
 
-export const getTaskManageDBInstance = () => {
+export const getManageDBInstance = (appId: string) => {
+  if (!appId) return null;
   return openDB(
-    `${INDEXED_DB_PREFIX}${TASK_MANAGE_DB_NAME}`,
-    TASK_MANAGE_DB_VERSION,
+    `${INDEXED_DB_PREFIX}${MANAGE_DB_NAME}_${appId}`,
+    MANAGE_DB_VERSION,
     {
       upgrade(db, oldVersion, newVersion, transaction, event) {
         // TODO: add generate db function

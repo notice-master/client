@@ -3,8 +3,9 @@ import {
   EllipsisOutlined,
   SendOutlined,
 } from '@ant-design/icons';
-import { getTaskManageDBInstance } from '@nmc/idb';
-import { gql, useAppDispatch, useQuery, setModalConfig } from '@nmc/common';
+import { getManageDBInstance } from '@nmc/idb';
+import { gql, useAppDispatch, useSelector, setModalConfig } from '@nmc/common';
+import type { GlobalState } from '@nmc/common';
 import type { IDBPDatabase } from '@nmc/idb';
 import { Pagination, Card, Col, Row } from 'antd';
 import type { PaginationProps } from 'antd';
@@ -17,6 +18,9 @@ import { TemplatePreview } from '../components';
 const MaterialList = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { appId = '' } = useSelector<{ global: GlobalState }, GlobalState>(
+    (state) => state?.global || {}
+  );
   const [materilas, setMaterilas] = useState<IMaterialTemplateMessageDetail[]>(
     []
   );
@@ -60,7 +64,8 @@ const MaterialList = () => {
   }, [taskManageDB, pagination.current, pagination.pageSize]);
 
   const initDB = async () => {
-    setTaskManageDB(await getTaskManageDBInstance());
+    const db = await getManageDBInstance(appId);
+    db && setTaskManageDB(db);
   };
   useEffect(() => {
     initDB();

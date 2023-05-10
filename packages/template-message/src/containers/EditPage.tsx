@@ -3,11 +3,19 @@ import {
   MobileOutlined,
   RollbackOutlined,
   SaveOutlined,
+  CloudSyncOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
 import { nanoid } from 'nanoid';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { gql, useAppDispatch, useInjectReducer, useQuery } from '@nmc/common';
-import { getTaskManageDBInstance } from '@nmc/idb';
+import {
+  gql,
+  useAppDispatch,
+  useInjectReducer,
+  useSelector,
+} from '@nmc/common';
+import type { GlobalState } from '@nmc/common';
+import { getManageDBInstance } from '@nmc/idb';
 import {
   Button,
   Card,
@@ -19,6 +27,7 @@ import {
   message,
   Row,
   Select,
+  Tooltip,
 } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -55,6 +64,9 @@ const schema = yup
   })
   .required();
 const EditPage = () => {
+  const { appId = '' } = useSelector<{ global: GlobalState }, GlobalState>(
+    (state) => state?.global || {}
+  );
   const [materialId, setMaterialId] = useState('');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -214,7 +226,8 @@ const EditPage = () => {
   }
 
   const onSubmit = async (values: any) => {
-    const db = await getTaskManageDBInstance();
+    const db = await getManageDBInstance(appId);
+    if (!db) return;
     if (materialId) {
       await db
         .transaction('materials', 'readwrite')
@@ -337,7 +350,22 @@ const EditPage = () => {
                         </Select>
                       )}
                     />
-                    <Button type="primary">更新列表</Button>
+                    <Tooltip title="添加类目模板">
+                      <Button
+                        style={{
+                          backgroundColor: '#7cb305',
+                          borderColor: '#7cb305',
+                        }}
+                        type="primary"
+                      >
+                        <PlusOutlined />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip title="更新/同步模板列表">
+                      <Button type="primary">
+                        <CloudSyncOutlined />
+                      </Button>
+                    </Tooltip>
                   </Space.Compact>
                 </Form.Item>
                 <Form.Item label="消息链接">

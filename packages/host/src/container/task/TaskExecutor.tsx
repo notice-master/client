@@ -1,5 +1,6 @@
-import { useAppDispatch } from '@nmc/common';
-import { getTaskManageDBInstance, PROCESS_STORE_PREFIX } from '@nmc/idb';
+import { useSelector } from '@nmc/common';
+import type { GlobalState } from '@nmc/common';
+import { getManageDBInstance, PROCESS_STORE_PREFIX } from '@nmc/idb';
 import type { IDBPDatabase } from '@nmc/idb';
 import { Button, Col, Input, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
@@ -16,6 +17,9 @@ const TaskExecutor = () => {
   if (!actionData) {
     return <Navigate replace to="../task/overview" />;
   }
+  const { appId = '' } = useSelector<{ global: GlobalState }, GlobalState>(
+    (state) => state?.global || {}
+  );
   const { taskId } = actionData;
   const [db, setDB] = useState<IDBPDatabase>();
   const [taskRecord, setTaskRecord] = useState<ITaskRecord>();
@@ -80,7 +84,8 @@ const TaskExecutor = () => {
     });
   };
   const initDB = async () => {
-    setTaskManageDB(await getTaskManageDBInstance());
+    const db = await getManageDBInstance(appId);
+    db && setTaskManageDB(db);
   };
   useEffect(() => {
     initDB();
