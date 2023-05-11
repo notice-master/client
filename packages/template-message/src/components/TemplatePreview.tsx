@@ -7,6 +7,7 @@ import {
   TemplatePreviewContent,
   withBorder,
 } from './style/TemplatePreviewBox.css';
+import { trim } from 'ramda';
 
 type TemplatePreviewProps = {
   data: templateDataType;
@@ -30,7 +31,11 @@ const TemplatePreview = (props: TemplatePreviewProps) => {
   const { Text } = Typography;
   let html = '';
   if (template?.content) {
-    html = template.content;
+    html = trim(
+      template.content
+        .replace(`{{first.DATA}}`, '')
+        .replace(`{{remark.DATA}}`, '')
+    );
   }
   const {
     data: fieldData,
