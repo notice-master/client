@@ -1,4 +1,4 @@
-const useTemplateFields = (content: string | undefined) => {
+export const useTemplateFields = (content: string | undefined) => {
   const regExp = /(\w+)(?=\.DATA)/gi;
   if (!content) return [];
   const fields = content.match(regExp);
@@ -13,4 +13,3 @@ const useTemplateFields = (content: string | undefined) => {
     return [];
   }
 };
-export default useTemplateFields;
