@@ -1,2 +1,2 @@
 export * from './useTemplateFields';
-export * from './useGetTemplates';
+export * from './useTemplates';

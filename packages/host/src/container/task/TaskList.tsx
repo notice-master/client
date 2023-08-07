@@ -1,6 +1,4 @@
-import { getManageDBInstance } from '@nmc/idb';
-import type { IDBPDatabase } from '@nmc/idb';
-import { useSelector } from '@nmc/common';
+import { useSelector, useManageDBInstance } from '@nmc/common';
 import type { GlobalState } from '@nmc/common';
 import { useEffect, useState } from 'react';
 import { Table, Button, Popconfirm } from 'antd';
@@ -17,7 +15,7 @@ const TaskList = () => {
   const { appId = '' } = useSelector<{ global: GlobalState }, GlobalState>(
     (state) => state?.global || {}
   );
-  const [taskManageDB, setTaskManageDB] = useState<IDBPDatabase>();
+  const { db: taskManageDB } = useManageDBInstance(appId);
   const [tasks, setTasks] = useState<ITaskRecord[]>();
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     total: 0,
@@ -25,10 +23,7 @@ const TaskList = () => {
     pageSize: 10,
   });
   const submit = useSubmit();
-  const initDB = async () => {
-    const db = await getManageDBInstance(appId);
-    db && setTaskManageDB(db);
-  };
+
   const handleTableChange = (newPagination: TablePaginationConfig) => {
     setPagination(newPagination);
   };
@@ -144,10 +139,7 @@ const TaskList = () => {
       },
     },
   ];
-
-  useEffect(() => {
-    initDB();
-  }, []);
+  useEffect(() => {}, []);
   useEffect(() => {
     refreshCurrentPage();
   }, [taskManageDB, pagination.current, pagination.pageSize]);

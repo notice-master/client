@@ -3,10 +3,14 @@ import {
   EllipsisOutlined,
   SendOutlined,
 } from '@ant-design/icons';
-import { getManageDBInstance } from '@nmc/idb';
-import { gql, useAppDispatch, useSelector, setModalConfig } from '@nmc/common';
+import {
+  gql,
+  useAppDispatch,
+  useSelector,
+  setModalConfig,
+  useManageDBInstance,
+} from '@nmc/common';
 import type { GlobalState } from '@nmc/common';
-import type { IDBPDatabase } from '@nmc/idb';
 import { Pagination, Card, Col, Row } from 'antd';
 import type { PaginationProps } from 'antd';
 import type { TablePaginationConfig } from 'antd/es/table';
@@ -24,7 +28,8 @@ const MaterialList = () => {
   const [materilas, setMaterilas] = useState<IMaterialTemplateMessageDetail[]>(
     []
   );
-  const [taskManageDB, setTaskManageDB] = useState<IDBPDatabase>();
+  const { db: taskManageDB } = useManageDBInstance(appId);
+
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     total: 0,
     current: 1,
@@ -63,13 +68,7 @@ const MaterialList = () => {
     refreshCurrentPage();
   }, [taskManageDB, pagination.current, pagination.pageSize]);
 
-  const initDB = async () => {
-    const db = await getManageDBInstance(appId);
-    db && setTaskManageDB(db);
-  };
-  useEffect(() => {
-    initDB();
-  }, []);
+  useEffect(() => {}, []);
 
   const handlePaginationChange = (page: number, pageSize: number) => {
     setPagination({

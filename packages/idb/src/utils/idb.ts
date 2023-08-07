@@ -1,4 +1,5 @@
-import { openDB, IDBPDatabase } from 'idb';
+import { openDB } from 'idb';
+import type { OpenDBCallbacks } from 'idb';
 import {
   INDEXED_DB_PREFIX,
   MANAGE_DB_NAME,
@@ -9,7 +10,11 @@ import {
   TASK_STATE_DB_NAME,
 } from '../constants';
 
-export const getManageDBInstance = (appId: string) => {
+export const getManageDBInstance = (
+  appId: string,
+  version?: number | undefined,
+  _upgrade?: OpenDBCallbacks<unknown>['upgrade']
+) => {
   if (!appId) return null;
   return openDB(
     `${INDEXED_DB_PREFIX}${MANAGE_DB_NAME}_${appId}`,
@@ -36,6 +41,9 @@ export const getManageDBInstance = (appId: string) => {
           materialStore.createIndex('type', 'type');
           materialStore.createIndex('createTime', 'createTime');
           materialStore.createIndex('updateTime', 'updateTime');
+        }
+        if (_upgrade) {
+          _upgrade(db, oldVersion, newVersion, transaction, event);
         }
       },
       blocked(currentVersion, blockedVersion, event) {},

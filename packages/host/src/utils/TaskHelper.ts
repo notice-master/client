@@ -37,6 +37,7 @@ export const deleteTask = async (
           console.log('🚀 ~ delete version:', version);
         },
       });
+      db.close();
     }
   }
 };

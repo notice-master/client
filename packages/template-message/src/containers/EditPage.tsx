@@ -46,7 +46,7 @@ import {
   TemplatePreview,
 } from '../components';
 import reducer from '../redux/slice';
-import { useGetTemplates } from '../hooks';
+import { useTemplates } from '../hooks';
 
 type teamplateType = {
   template_id: string;
@@ -129,8 +129,7 @@ const EditPage = () => {
       message.error(firstError?.message);
     }
   }, [errors]);
-  // TODO: get templates from API
-  const templates = useGetTemplates();
+  const templates = useTemplates();
   const teamplatesObject: teamplatesObjectType = {};
   if (templates.length) {
     templates.reduce((obj: teamplatesObjectType, cur: teamplateType) => {

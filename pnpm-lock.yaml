@@ -18,6 +18,7 @@ importers:
     specifiers:
       '@apollo/client': ^3.7.10
       '@efox/emp': ^2.6.4
+      '@nmc/idb': workspace:*
       '@reduxjs/toolkit': ^1.9.3
       '@types/ramda': ^0.28.23
       '@types/react': ^18.0.28
@@ -37,6 +38,7 @@ importers:
       redux-saga: ^1.2.3
     dependencies:
       '@apollo/client': 3.7.10_gdcq4dv6opitr3wbfwyjmanyra
+      '@nmc/idb': link:../idb
       '@reduxjs/toolkit': 1.9.3_k4ae6lp43ej6mezo3ztvx6pykq
       axios: 0.21.4
       graphql: 16.6.0

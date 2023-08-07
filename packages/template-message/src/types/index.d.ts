@@ -36,6 +36,7 @@ interface ITemplateData {
   primary_industry: string;
   template_id: string;
   title: string;
+  type?: string;
 }
 interface IMaterialTemplateMessageDetail {
   id: string;

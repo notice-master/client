@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Modal, Input } from 'antd';
-import type { IDBPDatabase } from '@nmc/idb';
-import { getManageDBInstance } from '@nmc/idb';
 import { nanoid } from 'nanoid';
-import { useSelector, useAppDispatch, setModalConfig } from '@nmc/common';
+import {
+  useSelector,
+  useAppDispatch,
+  setModalConfig,
+  useManageDBInstance,
+} from '@nmc/common';
 import type {
   ITaskModalStore,
   ITaskModalConfig,
@@ -23,7 +26,7 @@ export default ({ onConfirm }: ITaskModalProps) => {
   );
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [taskManageDB, setTaskManageDB] = useState<IDBPDatabase>();
+  const { db: taskManageDB } = useManageDBInstance(appId);
   const [taskId, setTaskId] = useState(nanoid());
   const handleConfirm = async () => {
     if (taskManageDB) {
@@ -60,14 +63,8 @@ export default ({ onConfirm }: ITaskModalProps) => {
       })
     );
   };
-  const initDB = async () => {
-    const db = await getManageDBInstance(appId);
-    db && setTaskManageDB(db);
-  };
 
-  useEffect(() => {
-    initDB();
-  }, []);
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (!open) {
