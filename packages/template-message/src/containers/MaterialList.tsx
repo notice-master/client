@@ -18,6 +18,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as R from 'ramda';
 import { TemplatePreview } from '../components';
+import { WECHAT_API_HOST } from '../constats';
 
 const MaterialList = () => {
   const dispatch = useAppDispatch();
@@ -96,9 +97,11 @@ const MaterialList = () => {
                         setModalConfig({
                           open: true,
                           defaultRequestConfig: {
-                            url: 'https://w.1717shua.cn/addons/zjl_mass_tpl_msg/apiAgent.php',
+                            url: `${WECHAT_API_HOST.replace(
+                              /\/$/,
+                              ''
+                            )}/cgi-bin/message/template/send`,
                             params: {
-                              api: 'message/template/send',
                               access_token: 'test_token',
                             },
                             data: R.clone(requestData),
