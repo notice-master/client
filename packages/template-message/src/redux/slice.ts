@@ -6,14 +6,16 @@ export interface CurrentPageInfo {
 }
 export interface GlobalState {
   currentPageInfo: CurrentPageInfo;
+  templates: any;
 }
 
 const initialState: GlobalState = {
   currentPageInfo: { title: 'Title', subtitle: 'This is a subtitle' },
+  templates: {},
 };
 
 export const tplSlice = createSlice({
-  name: 'template-messagetest',
+  name: 'template-message',
   initialState,
   reducers: {
     setCurrentPageInfo: (state, action: PayloadAction<CurrentPageInfo>) => {

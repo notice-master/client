@@ -13,6 +13,7 @@ import {
   useAppDispatch,
   useInjectReducer,
   useSelector,
+  WechatApi,
 } from '@nmc/common';
 import type { GlobalState } from '@nmc/common';
 import { getManageDBInstance } from '@nmc/idb';
@@ -75,6 +76,9 @@ const EditPage = () => {
     null
   );
   const { state = {} } = useLocation();
+  const { useLazyGetAllPrivateTemplateQuery } = WechatApi;
+
+  const [getTemplates, tplResult] = useLazyGetAllPrivateTemplateQuery();
 
   useInjectReducer({ key: 'template-message', reducer });
   const methods = useForm<templateDataType>({
@@ -275,7 +279,12 @@ const EditPage = () => {
                       </Button>
                     </Tooltip>
                     <Tooltip title="更新/同步模板列表">
-                      <Button type="primary">
+                      <Button
+                        type="primary"
+                        onClick={() => {
+                          getTemplates(1);
+                        }}
+                      >
                         <CloudSyncOutlined />
                       </Button>
                     </Tooltip>

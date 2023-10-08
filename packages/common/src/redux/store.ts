@@ -5,11 +5,13 @@ import { combineReducers } from 'redux';
 import dictionaryReducer from './dictionarySlice';
 import globalReducer from './globalSlice';
 import taskModalReducer from './taskModalSlice';
+import { WechatApi } from '../services/WechatApi';
 
 const defaultReducers = {
   global: globalReducer,
   dictionary: dictionaryReducer,
   taskModal: taskModalReducer,
+  [WechatApi.reducerPath]: WechatApi.reducer,
 };
 const sagaMiddleware = createSagaMiddleware();
 const runSaga = sagaMiddleware.run;
@@ -30,6 +32,9 @@ export const getGlobalStore = () => {
       ...defaultReducers,
     },
     enhancers,
+    middleware: (getDefaultMiddleware) => {
+      return getDefaultMiddleware().concat([WechatApi.middleware]);
+    },
   });
 };
 export const store = getGlobalStore();

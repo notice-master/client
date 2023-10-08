@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useAppDispatch, useAppSelector } from '../redux';
-import { fetchDictionaries } from '../redux/thunk';
 import { getManageDBInstance } from '@nmc/idb';
 import type { OpenDBCallbacks, IDBPDatabase } from '@nmc/idb';
 
