@@ -8,3 +8,4 @@ export * from './providers';
 export * from './redux';
 export * from './services';
 export * from './utils';
+export * from './types/index.d';

@@ -13,9 +13,8 @@ import {
   useAppDispatch,
   useInjectReducer,
   useSelector,
-  WechatApi,
 } from '@nmc/common';
-import type { GlobalState } from '@nmc/common';
+import type { GlobalState, IMessageTemplate } from '@nmc/common';
 import { getManageDBInstance } from '@nmc/idb';
 import {
   Button,
@@ -29,6 +28,7 @@ import {
   Row,
   Select,
   Tooltip,
+  Tag,
 } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -49,17 +49,6 @@ import {
 import reducer from '../redux/slice';
 import { useTemplates } from '../hooks';
 
-type teamplateType = {
-  template_id: string;
-  title: string;
-  primary_industry: string;
-  deputy_industry: string;
-  content: string;
-  example: string;
-};
-type teamplatesObjectType = {
-  [key: string]: teamplateType;
-};
 const schema = yup
   .object({
     ['template_id']: yup.string().required('请选择一个模板'),
@@ -72,13 +61,9 @@ const EditPage = () => {
   const [materialId, setMaterialId] = useState('');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [currentTemplate, setCurrentTemplate] = useState<teamplateType | null>(
-    null
-  );
+  const [currentTemplate, setCurrentTemplate] =
+    useState<IMessageTemplate | null>(null);
   const { state = {} } = useLocation();
-  const { useLazyGetAllPrivateTemplateQuery } = WechatApi;
-
-  const [getTemplates, tplResult] = useLazyGetAllPrivateTemplateQuery();
 
   useInjectReducer({ key: 'template-message', reducer });
   const methods = useForm<templateDataType>({
@@ -133,13 +118,16 @@ const EditPage = () => {
       message.error(firstError?.message);
     }
   }, [errors]);
-  const templates = useTemplates();
-  const teamplatesObject: teamplatesObjectType = {};
+  const { getTemplates, templates } = useTemplates();
+  const teamplatesObject: { [key: string]: IMessageTemplate } = {};
   if (templates.length) {
-    templates.reduce((obj: teamplatesObjectType, cur: teamplateType) => {
-      obj[cur.template_id] = cur;
-      return obj;
-    }, teamplatesObject);
+    templates.reduce(
+      (obj: { [key: string]: IMessageTemplate }, cur: IMessageTemplate) => {
+        obj[cur.template_id] = cur;
+        return obj;
+      },
+      teamplatesObject
+    );
   }
 
   const onSubmit = async (values: any) => {
@@ -178,7 +166,7 @@ const EditPage = () => {
           <FormProvider {...methods}>
             <Form
               form={form}
-              labelCol={{ span: 4 }}
+              labelCol={{ span: 5 }}
               wrapperCol={{ span: 20 }}
               layout="horizontal"
               size="large"
@@ -255,34 +243,44 @@ const EditPage = () => {
                           }}
                         >
                           {Object.values(teamplatesObject).map(
-                            (item: teamplateType) => (
-                              <Select.Option
-                                key={item.template_id}
-                                value={item.template_id}
-                              >
-                                {item.title}
-                              </Select.Option>
-                            )
+                            (item: IMessageTemplate) => {
+                              let templateTag = undefined;
+                              if (item?.primary_industry) {
+                                templateTag = {
+                                  color: 'green',
+                                  title: '历史模板',
+                                };
+                              } else if (item?.primary_industry === undefined) {
+                                templateTag = {
+                                  color: 'volcano',
+                                  title: '类目模板',
+                                };
+                              }
+                              return (
+                                <Select.Option
+                                  key={item.template_id}
+                                  value={item.template_id}
+                                >
+                                  <div>
+                                    {item.title}{' '}
+                                    {templateTag && (
+                                      <Tag color={templateTag.color}>
+                                        {templateTag.title}
+                                      </Tag>
+                                    )}
+                                  </div>
+                                </Select.Option>
+                              );
+                            }
                           )}
                         </Select>
                       )}
                     />
-                    <Tooltip title="添加类目模板">
-                      <Button
-                        style={{
-                          backgroundColor: '#7cb305',
-                          borderColor: '#7cb305',
-                        }}
-                        type="primary"
-                      >
-                        <PlusOutlined />
-                      </Button>
-                    </Tooltip>
                     <Tooltip title="更新/同步模板列表">
                       <Button
                         type="primary"
                         onClick={() => {
-                          getTemplates(1);
+                          getTemplates();
                         }}
                       >
                         <CloudSyncOutlined />

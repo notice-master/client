@@ -3,6 +3,7 @@ import type { BaseQueryFn } from '@reduxjs/toolkit/query';
 import axios from 'axios';
 import type { AxiosRequestConfig, AxiosError } from 'axios';
 import { WECHAT_API_HOST } from '../constants';
+import type { IIMessageTemplateResponse } from '../types';
 
 export const wechatBaseQuery =
   (
@@ -26,7 +27,7 @@ export const wechatBaseQuery =
         data,
         params: {
           access_token:
-            '73_5KyZY3uo1Wf93YsM9Exvg5E6EFoKmAoMTBXjafvjJLm3dFGjiDlYWiei1Q-Dn-qN_b9NNO4SY_VgDMcYTvgBcpUMlq9adDgWgM-FOHbLHgbkMU7sPdapb9u0xdEGQViAAARBG',
+            '73_tqJfbdLfvmxopc4Zrg9YNYUdntGjsZej9-WkZwUQqMdrzi24wABkpsmU80xpm8IT0IGIbvqEqD7D_2mXv14R3Kl73WPFyxMWloIgVvsqT7ooxgTQI6buOxfc-XERVKjADANRG',
           ...params,
         },
         headers,
@@ -49,7 +50,7 @@ export const WechatApi = createApi({
     baseUrl: WECHAT_API_HOST,
   }),
   endpoints: (builder) => ({
-    getAllPrivateTemplate: builder.query<any, any>({
+    getAllPrivateTemplate: builder.query<IIMessageTemplateResponse, void>({
       query: () => ({
         url: '/cgi-bin/template/get_all_private_template',
         method: 'get',

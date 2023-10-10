@@ -93,7 +93,7 @@ const TemplateField: React.ForwardRefRenderFunction<
                 }}
                 style={{ color: textColor }}
               />
-              <Tooltip title="选取颜色">
+              {/* <Tooltip title="选取颜色">
                 <Popover
                   placement="leftTop"
                   overlayClassName={exampleStyle}
@@ -113,7 +113,7 @@ const TemplateField: React.ForwardRefRenderFunction<
                     icon={<FontColorsOutlined style={{ color: textColor }} />}
                   />
                 </Popover>
-              </Tooltip>
+              </Tooltip> */}
             </>
           )}
         />
