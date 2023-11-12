@@ -5,7 +5,8 @@
         "material": "素材",
         "overview": "概览",
         "list": "列表",
-        "task": "任务"
+        "task": "任务",
+        "settings": "设置"
     },
     "en-US": {
         "home": "Home",
@@ -13,6 +14,7 @@
         "material": "material",
         "test": "test",
         "list": "list",
-        "task": "Task"
+        "task": "Task",
+        "settings": "Settings"
     }
 }

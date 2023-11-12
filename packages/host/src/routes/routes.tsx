@@ -1,10 +1,4 @@
-import {
-  Navigate,
-  Form,
-  useActionData,
-  BrowserRouter,
-  Outlet,
-} from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { Alert } from 'antd';
 import {
@@ -13,6 +7,7 @@ import {
   TaskEntry,
   MaterialEntry,
   NotFoundPage,
+  SettingsPage,
 } from '../container';
 import TaskExecutor from 'src/container/task/TaskExecutor';
 import React from 'react';
@@ -68,10 +63,10 @@ const routes: RouteObject[] = [
           </React.Suspense>
         ),
       },
-      // {
-      //   path: 'settings',
-      //   Component: Settings,
-      // },
+      {
+        path: 'settings',
+        Component: SettingsPage,
+      },
       {
         path: '/',
         element: <Navigate replace to="home" />,

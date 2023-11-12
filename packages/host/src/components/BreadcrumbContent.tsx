@@ -1,10 +1,10 @@
-import { globalMessages, useNLS } from '@nmc/common';
+import { useNLS } from '@nmc/common';
 import { Breadcrumb } from 'antd';
 import { useLocation } from 'react-router-dom';
 
 const BreadcrumbContent = () => {
   const { pathname } = useLocation();
-  const { intl } = useNLS();
+  const { nls } = useNLS('global');
 
   return (
     <Breadcrumb
@@ -13,9 +13,7 @@ const BreadcrumbContent = () => {
         .split('/')
         .filter((item) => item)
         .map((item: string) => ({
-          title: globalMessages[item]
-            ? intl.formatMessage(globalMessages[item])
-            : item,
+          title: nls(item),
         }))}
     ></Breadcrumb>
   );

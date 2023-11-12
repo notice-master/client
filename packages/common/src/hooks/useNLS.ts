@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useAppDispatch, useAppSelector } from '../redux';
 import { fetchDictionaries } from '../redux/thunk';
@@ -12,5 +12,17 @@ export const useNLS = (scope?: string) => {
     }
   }, [locale]);
   const intl = useIntl();
-  return { intl, locale };
+  const nls = useCallback(
+    (key: string, options?: Record<string, any>) => {
+      return intl.formatMessage(
+        {
+          id: `${scope}.${key}`,
+          defaultMessage: `${scope}.${key}`,
+        },
+        options
+      );
+    },
+    [intl]
+  );
+  return { intl, locale, nls };
 };
